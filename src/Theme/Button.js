@@ -10,7 +10,7 @@ export const Button = defineStyleConfig({
 
   variants: {
     outline: {
-      border: '2px solid',
+      border: '1px solid',
       borderColor: 'black',
       color: 'black',
     },
@@ -20,6 +20,12 @@ export const Button = defineStyleConfig({
     },
     transparent: {
       bg: 'none',
+    },
+    off: {
+      opacity: 0.2,
+      border: '1px solid',
+      borderColor: 'black',
+      color: 'black',
     },
   },
   // The default size and variant values

@@ -10,6 +10,7 @@ import {
   DrawerFooter,
   VStack,
 } from '@chakra-ui/react';
+import { ButtonStd } from '../../ButtonStd/ButtonStd';
 
 export const DirectorFilter = props => {
   return (
@@ -24,13 +25,11 @@ export const DirectorFilter = props => {
         <DrawerHeader>Filter your directors</DrawerHeader>
         <DrawerBody>
           <VStack align={'left'}>
-            <Button _hover={{ bg: 'black', color: 'yellow.400' }}>
-              Only directors with projects
-            </Button>
-            <Button variant={'outline'}>From my wishlist</Button>
-            <Button variant={'outline'}>Already available</Button>
-            <Button variant={'outline'}>Hide Ignored</Button>
-            <Button>Hide ignored</Button>
+            <ButtonStd label="Only directors with projects" />
+            <ButtonStd label="Movies already available" variant={'off'} />
+            <ButtonStd label="Only my wishlist" variant={'off'} />
+            <ButtonStd label="Hide watched movies" variant={'off'} />
+            <ButtonStd label="Hide ignored movies" variant={'off'} />
           </VStack>
         </DrawerBody>
 

@@ -1,7 +1,7 @@
 import React from 'react';
-import LogoLightMode from '../assets/logo.png';
-import logoDarkMode from '../assets/logo_dark_mode.png';
-import smallLogo from '../assets/small_logo.png';
+import LogoLightMode from '../../assets/logo.png';
+import logoDarkMode from '../../assets/logo_dark_mode.png';
+import smallLogo from '../../assets/small_logo.png';
 import {
   Box,
   useColorModeValue,

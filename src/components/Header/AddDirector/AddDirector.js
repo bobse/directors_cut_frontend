@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { Search2Icon, AddIcon } from '@chakra-ui/icons';
 import { DirectorResultItem } from './DirectorResultItem';
+import { ButtonStd } from '../../../components/ButtonStd/ButtonStd';
 
 export const AddDirector = props => {
   return (
@@ -27,7 +28,7 @@ export const AddDirector = props => {
       isOpen={props.addDirectorDrawerisOpen}
       placement="right"
       onClose={() => props.setAddDirectorDrawer(false)}
-      size={'lg'}
+      size={'md'}
     >
       <DrawerOverlay />
       <DrawerContent>
@@ -50,8 +51,8 @@ export const AddDirector = props => {
               placeholder={'Who are you looking for?'}
             ></Input>
             <HStack>
-              <Button leftIcon={<Search2Icon />}>Search</Button>
-              <Button>View all directors</Button>
+              <ButtonStd leftIcon={<Search2Icon />} label="Search" />
+              <ButtonStd label="View all directors" />
             </HStack>
             <DirectorResultItem
               director={{ name: 'Bob', id: 1, on_my_list: false }}
