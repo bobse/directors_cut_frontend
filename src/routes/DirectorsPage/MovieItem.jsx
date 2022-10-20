@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState } from 'react';
 import {
   Badge,
   Box,
@@ -12,6 +12,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { StarIcon, CheckCircleIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { MovieInfo } from './MovieInfo/MovieInfo';
 
 const Tags = props => {
   const bgColor = useColorModeValue('whiteAlpha.800', 'gray.900');
@@ -60,7 +61,7 @@ const MovieIcons = props => {
               title: 'Wishlist',
               description: 'Added to wishlist',
               status: 'success',
-              duration: 2000,
+              duration: 3000,
               isClosable: true,
               position: 'top',
             });
@@ -96,6 +97,8 @@ const MovieIcons = props => {
 };
 
 export const MovieItem = props => {
+  const [movieDetail, setMovieDetail] = useState();
+
   const movieBg = useColorModeValue(
     'linear(to-b, gray.100, transparent)',
     'linear(to-b, gray.700, transparent)'
@@ -103,20 +106,23 @@ export const MovieItem = props => {
   const tags = [props.movieInfo.release_date, props.movieInfo.type];
   props.movieInfo.is_available_now && tags.unshift('available');
   return (
-    <Box minH={'80px'} bgGradient={movieBg} p={2} ml={2} mt={2} pb={4}>
-      <Tags tags={tags} />
-      <Flex spacing={1} overflow="hidden">
-        <Box flex={1} fontWeight={'normal'}>
-          <Link
-            onClick={() => {
-              props.setMovieDetail(props.movieInfo);
-            }}
-          >
-            <Text noOfLines={2}>{props.movieInfo.name}</Text>
-          </Link>
-        </Box>
-        <MovieIcons userChoice="wishlist" />
-      </Flex>
-    </Box>
+    <>
+      <MovieInfo movieDetail={movieDetail} setMovieDetail={setMovieDetail} />
+      <Box minH={'80px'} bgGradient={movieBg} p={2} ml={2} mt={2} pb={4}>
+        <Tags tags={tags} />
+        <Flex spacing={1} overflow="hidden">
+          <Box flex={1} fontWeight={'normal'}>
+            <Link
+              onClick={() => {
+                setMovieDetail(props.movieInfo);
+              }}
+            >
+              <Text noOfLines={2}>{props.movieInfo.name}</Text>
+            </Link>
+          </Box>
+          <MovieIcons userChoice="wishlist" />
+        </Flex>
+      </Box>
+    </>
   );
 };

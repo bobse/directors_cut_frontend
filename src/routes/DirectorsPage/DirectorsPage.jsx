@@ -9,8 +9,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { Header } from '../../components/Header/Header';
-import { DeleteModal } from './DeleteModal';
-import { MovieInfo } from './MovieInfo/MovieInfo';
 import api from '../../services/api';
 import auth from '../../services/auth';
 import * as constants from '../../constants';
@@ -21,6 +19,7 @@ export const DirectorsPage = props => {
   const [isLoading, setIsLoading] = useState(true);
   const [myDirectors, setMyDirectors] = useState();
   const toast = useToast();
+
   useEffect(() => {
     async function getDirectors() {
       try {
@@ -28,23 +27,13 @@ export const DirectorsPage = props => {
         setMyDirectors(response.data);
         setIsLoading(false);
       } catch (error) {
-        if (error.response) {
-          setIsLoading(false);
-          if (error.response.status === 401) {
-            auth.removeToken();
-            navigate('/login');
-          }
-        }
+        setIsLoading(false);
+        auth.removeToken();
+        navigate('/login');
       }
     }
     getDirectors();
   }, [navigate]);
-
-  // DeleteDirector
-  const [deleteDirectorId, setDeleteDirectorId] = useState({
-    id: undefined,
-    name: undefined,
-  });
 
   async function deleteDirectorMethod(id) {
     let myNewDirectors = JSON.parse(JSON.stringify(myDirectors));
@@ -58,9 +47,10 @@ export const DirectorsPage = props => {
           title: 'Deleted!',
           description:
             myDirectors[directorIndex].name + ' removed from your list!',
-          status: 'success',
-          duration: 2000,
+          status: 'warning',
+          duration: 5000,
           isClosable: true,
+          position: 'top',
         });
         myNewDirectors.splice(directorIndex, 1);
         setMyDirectors(myNewDirectors);
@@ -70,31 +60,58 @@ export const DirectorsPage = props => {
           title: 'Sorry!',
           description: 'Could not delete the director. Please try again!',
           status: 'error',
-          duration: 2000,
+          duration: 5000,
           isClosable: true,
+          position: 'top',
         });
       });
   }
 
-  const closeModal = () => {
-    setDeleteDirectorId({ id: undefined, name: undefined });
-  };
-  // EndDeleteDirector
+  function reorderDirectors(directorList) {
+    directorList.sort((a, b) => {
+      if (a.name.toUpperCase() < b.name.toUpperCase()) return -1;
+      if (a.name.toUpperCase() > b.name.toUpperCase()) return 1;
+      return 0;
+    });
+    return directorList;
+  }
 
-  // MovieInfoDrawer
-  const [movieDetail, setMovieDetail] = useState();
-  // EndMovieInfoDrawer
+  async function addDirector(director) {
+    try {
+      const response = await api.post(
+        constants.APIDIRECTOR + director.id + '/'
+      );
+      let currDirector = response.data;
+      currDirector['in_user_list'] = true;
+      let newDirectors = JSON.parse(JSON.stringify(myDirectors));
+      newDirectors.push(currDirector);
+      setMyDirectors(reorderDirectors(newDirectors));
+      toast({
+        title: 'Director added!',
+        description: response.data.name + ' added from your list!',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+    } catch (error) {
+      toast({
+        title: 'Sorry!',
+        description:
+          'Could not add ' + director.name + ' to your list. Please try again!',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+      throw error;
+    }
+  }
 
   return (
     <Box flexGrow={1} w={'full'}>
-      <DeleteModal
-        deleteDirectorId={deleteDirectorId}
-        closeModal={closeModal}
-        deleteDirectorMethod={deleteDirectorMethod}
-      />
-      <MovieInfo movieDetail={movieDetail} setMovieDetail={setMovieDetail} />
       <VStack spacing={4}>
-        <Header />
+        <Header myDirectors={myDirectors} addDirector={addDirector} />
         <Box flexGrow="1" w="full">
           {isLoading && (
             <Center>
@@ -112,8 +129,7 @@ export const DirectorsPage = props => {
               return (
                 <DirectorCard
                   key={director.id}
-                  setDeleteDirectorId={setDeleteDirectorId}
-                  setMovieDetail={setMovieDetail}
+                  deleteDirectorMethod={deleteDirectorMethod}
                   directorInfo={director}
                 />
               );

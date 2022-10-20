@@ -7,7 +7,7 @@ export const Footer = props => {
     <Box alignSelf={'flex-end'} color={'gray.500'} w="full" mt={16}>
       <Divider />
 
-      <Center h={8} fontSize={'0.7rem'}>
+      <Center h={[24, 8]} fontSize={'0.7rem'}>
         <HStack w={'full'} p={4} spacing={4}>
           <ColorModeSwitcher
             fontSize="md"

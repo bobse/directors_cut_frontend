@@ -1,4 +1,4 @@
-import { React } from 'react';
+import { React, useState } from 'react';
 import {
   Box,
   HStack,
@@ -9,9 +9,61 @@ import {
   MenuItem,
   MenuButton,
   Button,
+  Text,
 } from '@chakra-ui/react';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
 import { MovieItem } from './MovieItem';
+import { DeleteModal } from './DeleteModal';
+
+export const DirectorCard = props => {
+  const [deleteDirectorId, setDeleteDirectorId] = useState({
+    id: undefined,
+    name: undefined,
+  });
+  const closeModal = () => {
+    setDeleteDirectorId({ id: undefined, name: undefined });
+  };
+  return (
+    <>
+      <DeleteModal
+        deleteDirectorId={deleteDirectorId}
+        closeModal={closeModal}
+        deleteDirectorMethod={props.deleteDirectorMethod}
+      />
+      <Box borderLeft="4px" borderColor={'yellow.400'} minH={'250px'} pb={8}>
+        <DirectorName
+          setDeleteDirectorId={setDeleteDirectorId}
+          directorInfo={props.directorInfo}
+        />
+        {props.directorInfo.movies.length > 0 ? (
+          props.directorInfo.movies.map((movie, idx) => {
+            return <MovieItem key={movie.id} movieInfo={movie} />;
+          })
+        ) : (
+          <Text p={4}>No current new projects</Text>
+        )}
+      </Box>
+    </>
+  );
+};
+
+const DirectorName = props => {
+  const textColor = useColorModeValue('gray.800', 'gray.800');
+  return (
+    <Box bg={'yellow.400'} p={1}>
+      <HStack>
+        <Box textStyle="h2" p={0} color={textColor}>
+          {props.directorInfo.name}
+        </Box>
+        <Spacer />
+        <DirectorDots
+          directorInfo={props.directorInfo}
+          setDeleteDirectorId={props.setDeleteDirectorId}
+        />
+      </HStack>
+    </Box>
+  );
+};
 
 const DirectorDots = props => {
   return (
@@ -41,43 +93,5 @@ const DirectorDots = props => {
         <MenuItem>View on imdb</MenuItem>
       </MenuList>
     </Menu>
-  );
-};
-
-const DirectorName = props => {
-  const textColor = useColorModeValue('gray.800', 'gray.800');
-  return (
-    <Box bg={'yellow.400'} p={1}>
-      <HStack>
-        <Box textStyle="h2" p={0} color={textColor}>
-          {props.directorInfo.name}
-        </Box>
-        <Spacer />
-        <DirectorDots
-          directorInfo={props.directorInfo}
-          setDeleteDirectorId={props.setDeleteDirectorId}
-        />
-      </HStack>
-    </Box>
-  );
-};
-
-export const DirectorCard = props => {
-  return (
-    <Box borderLeft="4px" borderColor={'yellow.400'} minH={'250px'} pb={8}>
-      <DirectorName
-        setDeleteDirectorId={props.setDeleteDirectorId}
-        directorInfo={props.directorInfo}
-      />
-      {props.directorInfo.movies.map((movie, idx) => {
-        return (
-          <MovieItem
-            setMovieDetail={props.setMovieDetail}
-            key={movie.id}
-            movieInfo={movie}
-          />
-        );
-      })}
-    </Box>
   );
 };

@@ -12,7 +12,6 @@ import { UserMenu } from './UserMenu';
 export const Header = props => {
   const [filterDrawerisOpen, setfilterDrawer] = useState(false);
   const [addDirectorDrawerisOpen, setAddDirectorDrawer] = useState(false);
-
   return (
     <Flex w="100%" p={0}>
       <DirectorFilter
@@ -22,6 +21,8 @@ export const Header = props => {
       <AddDirector
         addDirectorDrawerisOpen={addDirectorDrawerisOpen}
         setAddDirectorDrawer={setAddDirectorDrawer}
+        addDirector={props.addDirector}
+        myDirectors={props.myDirectors}
       />
 
       <Center flex={1} justifyContent={'left'}>
@@ -51,7 +52,9 @@ export const Header = props => {
             label="Add director"
           />
         </Box>
-        <Box fontSize={'sm'}>Showing 75 of 100 directors</Box>
+        <Box fontSize={'sm'}>
+          Showing 75 of {props.myDirectors?.length} directors
+        </Box>
       </VStack>
     </Flex>
   );
