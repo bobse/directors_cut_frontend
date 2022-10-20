@@ -1,4 +1,4 @@
-import { React } from 'react';
+import { React, useEffect } from 'react';
 import {
   Button,
   Drawer,
@@ -14,11 +14,15 @@ import { ButtonStd } from '../../ButtonStd/ButtonStd';
 import { filtersConstant } from './filterHelper';
 
 export const DirectorFilter = props => {
+  useEffect(() => {
+    localStorage.setItem('filters', JSON.stringify(props.filters));
+  }, [props.filters]);
   return (
     <Drawer
       isOpen={props.filterDrawerisOpen}
       placement="right"
       onClose={() => props.setfilterDrawer(false)}
+      size={'md'}
     >
       <DrawerOverlay />
       <DrawerContent>
@@ -27,10 +31,10 @@ export const DirectorFilter = props => {
         <DrawerBody>
           <VStack align={'left'}>
             {props.filters &&
-              Object.keys(filtersConstant).map(filterkey => {
+              Object.keys(filtersConstant).map((filterkey, idx) => {
                 return (
                   <ButtonStd
-                    key={filterkey}
+                    key={idx}
                     label={filtersConstant[filterkey].label}
                     variant={props.filters[filterkey] ? 'solid' : 'off'}
                     onClick={() => {
@@ -39,6 +43,7 @@ export const DirectorFilter = props => {
                       );
                       newFilters[filterkey] = !newFilters[filterkey];
                       props.setFilters(newFilters);
+                      props.setfilterDrawer(false);
                     }}
                   />
                 );

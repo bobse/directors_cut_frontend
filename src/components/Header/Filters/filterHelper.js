@@ -1,7 +1,7 @@
 export const filtersConstant = {
   alreadyAvailable: {
     default: false,
-    label: 'Movies already available',
+    label: 'Only show already available',
     method: filterAlreadyAvailableOnly,
   },
   onWishlist: {
@@ -20,7 +20,7 @@ export const filtersConstant = {
     method: filterHideWatched,
   },
   withProjectsOnly: {
-    default: true,
+    default: false,
     label: 'Only directors with projects',
     method: filterProjectsOnly,
   },
@@ -33,7 +33,6 @@ export default function filterMyDirectors(filters, myDirectors) {
       newList = filtersConstant[key].method(newList);
     }
   }
-  console.log(newList);
   return newList;
 }
 
@@ -81,9 +80,14 @@ function filterHideWatched(myDirectors) {
 
 // Filter Initial State Generator
 export function generateFilterStates() {
-  let filterStates = Object.entries(filtersConstant).map(item => [
-    item[0],
-    item[1].default,
-  ]);
-  return Object.fromEntries(filterStates);
+  const savedFilters = JSON.parse(localStorage.getItem('filters'));
+  if (savedFilters) {
+    return savedFilters;
+  } else {
+    let filterStates = Object.entries(filtersConstant).map(item => [
+      item[0],
+      item[1].default,
+    ]);
+    return Object.fromEntries(filterStates);
+  }
 }
