@@ -100,10 +100,11 @@ export const MovieItem = props => {
     'linear(to-b, gray.100, transparent)',
     'linear(to-b, gray.700, transparent)'
   );
-
+  const tags = [props.movieInfo.release_date, props.movieInfo.type];
+  props.movieInfo.is_available_now && tags.unshift('available');
   return (
     <Box minH={'80px'} bgGradient={movieBg} p={2} ml={2} mt={2} pb={4}>
-      <Tags tags={['available', '2022-02-01', 'film']} />
+      <Tags tags={tags} />
       <Flex spacing={1} overflow="hidden">
         <Box flex={1} fontWeight={'normal'}>
           <Link

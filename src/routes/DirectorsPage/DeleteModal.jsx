@@ -6,10 +6,8 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
-  AlertDialogCloseButton,
   Button,
 } from '@chakra-ui/react';
-import { FaBullseye } from 'react-icons/fa';
 
 export const DeleteModal = props => {
   const cancelRef = React.useRef();

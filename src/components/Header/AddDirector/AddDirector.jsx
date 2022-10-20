@@ -7,18 +7,13 @@ import {
   DrawerCloseButton,
   DrawerBody,
   DrawerFooter,
-  Center,
   VStack,
   Box,
-  Button,
   Input,
   HStack,
-  Divider,
-  Square,
-  Flex,
   Link,
 } from '@chakra-ui/react';
-import { Search2Icon, AddIcon } from '@chakra-ui/icons';
+import { Search2Icon } from '@chakra-ui/icons';
 import { DirectorResultItem } from './DirectorResultItem';
 import { ButtonStd } from '../../../components/ButtonStd/ButtonStd';
 

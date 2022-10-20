@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Heading, Text, VStack, Link } from '@chakra-ui/react';
+import { Center, Heading, Text, VStack } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ButtonStd } from '../../components/ButtonStd/ButtonStd';
 

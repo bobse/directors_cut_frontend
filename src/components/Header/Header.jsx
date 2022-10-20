@@ -2,7 +2,7 @@ import { React, useState } from 'react';
 import { Flex, Center, IconButton, VStack, Box } from '@chakra-ui/react';
 import { ImFilter } from 'react-icons/im';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { Logo } from './Logo.js';
+import { Logo } from './Logo';
 import { AddIcon } from '@chakra-ui/icons';
 import { DirectorFilter } from './Filters/DirectorFilter';
 import { AddDirector } from './AddDirector/AddDirector';
@@ -39,7 +39,6 @@ export const Header = props => {
             _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
             onClick={() => setfilterDrawer(true)}
           />
-
           <ColorModeSwitcher
             fontSize="md"
             _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}

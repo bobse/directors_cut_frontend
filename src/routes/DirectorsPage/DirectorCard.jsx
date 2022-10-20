@@ -73,7 +73,7 @@ export const DirectorCard = props => {
         return (
           <MovieItem
             setMovieDetail={props.setMovieDetail}
-            key={idx}
+            key={movie.id}
             movieInfo={movie}
           />
         );

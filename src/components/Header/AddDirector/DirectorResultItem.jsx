@@ -1,5 +1,5 @@
 import { React } from 'react';
-import { Box, HStack, Square, Button } from '@chakra-ui/react';
+import { Box, HStack } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { ButtonStd } from '../../ButtonStd/ButtonStd';
 

@@ -1,19 +1,17 @@
 import React from 'react';
 import {
-  Box,
-  HStack,
-  Spacer,
-  useColorModeValue,
   Menu,
   MenuList,
   MenuItem,
   MenuButton,
-  Button,
   IconButton,
+  MenuDivider,
 } from '@chakra-ui/react';
 import { BiUserCircle } from 'react-icons/bi';
+import auth from '../../services/auth';
 
 export const UserMenu = props => {
+  const profile = auth.getProfile();
   return (
     <Menu {...props}>
       <MenuButton
@@ -27,9 +25,19 @@ export const UserMenu = props => {
         _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
       />
       <MenuList>
+        <MenuItem>
+          {profile?.user?.name} - {profile?.user?.email}
+        </MenuItem>
+        <MenuDivider />
         <MenuItem>Edit profile</MenuItem>
-        <MenuItem>Logout</MenuItem>
-        <MenuItem>Logout All Devices</MenuItem>
+        <MenuItem
+          onClick={() => {
+            console.log('logout');
+            auth.logout();
+          }}
+        >
+          Logout
+        </MenuItem>
       </MenuList>
     </Menu>
   );

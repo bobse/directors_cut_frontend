@@ -7,7 +7,6 @@ export const Button = defineStyleConfig({
     // textTransform: 'uppercase',
     borderRadius: '0', // <-- border radius is same for all variants and sizes
   },
-
   variants: {
     outline: {
       border: '1px solid',
