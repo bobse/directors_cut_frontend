@@ -51,7 +51,14 @@ export const DirectorFilter = props => {
           </VStack>
         </DrawerBody>
         <DrawerFooter>
-          <Button>Clear all filters</Button>
+          <Button
+            onClick={() => {
+              props.clearFilters();
+              props.setfilterDrawer(false);
+            }}
+          >
+            Clear all filters
+          </Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
