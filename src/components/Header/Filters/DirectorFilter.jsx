@@ -11,6 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { ButtonStd } from '../../ButtonStd/ButtonStd';
+import { filtersConstant } from './filterHelper';
 
 export const DirectorFilter = props => {
   return (
@@ -25,14 +26,25 @@ export const DirectorFilter = props => {
         <DrawerHeader>Filter your directors</DrawerHeader>
         <DrawerBody>
           <VStack align={'left'}>
-            <ButtonStd label="Only directors with projects" />
-            <ButtonStd label="Movies already available" variant={'off'} />
-            <ButtonStd label="Only my wishlist" variant={'off'} />
-            <ButtonStd label="Hide watched movies" variant={'off'} />
-            <ButtonStd label="Hide ignored movies" variant={'off'} />
+            {props.filters &&
+              Object.keys(filtersConstant).map(filterkey => {
+                return (
+                  <ButtonStd
+                    key={filterkey}
+                    label={filtersConstant[filterkey].label}
+                    variant={props.filters[filterkey] ? 'solid' : 'off'}
+                    onClick={() => {
+                      let newFilters = JSON.parse(
+                        JSON.stringify(props.filters)
+                      );
+                      newFilters[filterkey] = !newFilters[filterkey];
+                      props.setFilters(newFilters);
+                    }}
+                  />
+                );
+              })}
           </VStack>
         </DrawerBody>
-
         <DrawerFooter>
           <Button>Clear all filters</Button>
         </DrawerFooter>

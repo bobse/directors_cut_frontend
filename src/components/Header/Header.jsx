@@ -17,6 +17,9 @@ export const Header = props => {
       <DirectorFilter
         filterDrawerisOpen={filterDrawerisOpen}
         setfilterDrawer={setfilterDrawer}
+        clearFilters={props.clearFilters}
+        setFilters={props.setFilters}
+        filters={props.filters}
       />
       <AddDirector
         addDirectorDrawerisOpen={addDirectorDrawerisOpen}
@@ -51,9 +54,6 @@ export const Header = props => {
             onClick={() => setAddDirectorDrawer(true)}
             label="Add director"
           />
-        </Box>
-        <Box fontSize={'sm'}>
-          Showing 75 of {props.myDirectors?.length} directors
         </Box>
       </VStack>
     </Flex>

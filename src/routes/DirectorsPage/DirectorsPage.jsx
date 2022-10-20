@@ -7,17 +7,22 @@ import {
   Spinner,
   Center,
   useToast,
+  Link,
 } from '@chakra-ui/react';
 import { Header } from '../../components/Header/Header';
 import api from '../../services/api';
 import auth from '../../services/auth';
 import * as constants from '../../constants';
 import { useNavigate } from 'react-router-dom';
+import filterMyDirectors, {
+  generateFilterStates,
+} from '../../components/Header/Filters/filterHelper';
 
 export const DirectorsPage = props => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [myDirectors, setMyDirectors] = useState();
+  const [myDirectors, setMyDirectors] = useState([]);
+  const [filters, setFilters] = useState(generateFilterStates());
   const toast = useToast();
 
   useEffect(() => {
@@ -108,10 +113,26 @@ export const DirectorsPage = props => {
     }
   }
 
+  function clearFilters() {
+    let filtersCopy = JSON.parse(JSON.stringify(filters));
+    for (let key in filtersCopy) {
+      filtersCopy[key] = false;
+    }
+    setFilters(filtersCopy);
+  }
+
+  const filteredDirectors = filterMyDirectors(filters, myDirectors);
+
   return (
     <Box flexGrow={1} w={'full'}>
       <VStack spacing={4}>
-        <Header myDirectors={myDirectors} addDirector={addDirector} />
+        <Header
+          myDirectors={myDirectors}
+          addDirector={addDirector}
+          clearFilters={clearFilters}
+          setFilters={setFilters}
+          filters={filters}
+        />
         <Box flexGrow="1" w="full">
           {isLoading && (
             <Center>
@@ -124,16 +145,28 @@ export const DirectorsPage = props => {
               />
             </Center>
           )}
+          {myDirectors.length > 0 && (
+            <Box fontSize={'sm'} mb={4} textAlign={'right'}>
+              Showing {filteredDirectors.length} of {myDirectors?.length}{' '}
+              directors
+              {filteredDirectors.length !== myDirectors.length && (
+                <Link px={2} onClick={clearFilters}>
+                  ( Clear filters )
+                </Link>
+              )}
+            </Box>
+          )}
           <SimpleGrid columns={[1, 2, 3, 4]} spacing="40px">
-            {myDirectors?.map(director => {
-              return (
-                <DirectorCard
-                  key={director.id}
-                  deleteDirectorMethod={deleteDirectorMethod}
-                  directorInfo={director}
-                />
-              );
-            })}
+            {myDirectors.length > 0 &&
+              filteredDirectors.map(director => {
+                return (
+                  <DirectorCard
+                    key={director.id}
+                    deleteDirectorMethod={deleteDirectorMethod}
+                    directorInfo={director}
+                  />
+                );
+              })}
           </SimpleGrid>
         </Box>
       </VStack>

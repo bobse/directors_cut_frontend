@@ -18,6 +18,7 @@ import {
   AlertIcon,
   InputGroup,
   IconButton,
+  Box,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import LogoLightMode from '../../assets/logo.png';
@@ -65,7 +66,8 @@ export const LoginPage = props => {
     }
   };
 
-  async function Submit() {
+  async function Submit(e) {
+    e.preventDefault();
     setAlertErrors();
     let values = JSON.parse(JSON.stringify(fieldsValue));
     if (ValidateInputs(values)) {
@@ -116,7 +118,7 @@ export const LoginPage = props => {
   return (
     <Center
       w={'full'}
-      h={'full'}
+      h={[null, 'full']}
       backgroundImage={bgImage}
       backgroundRepeat={'no-repeat'}
       backgroundPosition={'center'}
@@ -141,58 +143,62 @@ export const LoginPage = props => {
           something new comes up.
         </Text>
         <Alerts alertErrors={alertErrors} />
-        <FormControl isInvalid={fieldsError.email !== ''}>
-          <FormLabel>Email</FormLabel>
-          <Input
-            type="email"
-            name="email"
-            bg={InputBg}
-            value={fieldsValue.email}
-            onChange={handleInputChange}
-          />
-          {fieldsError.email !== '' && (
-            <FormErrorMessage>{fieldsError.email}</FormErrorMessage>
-          )}
-        </FormControl>
-        <FormControl isInvalid={fieldsError.password !== ''}>
-          <FormLabel>Password</FormLabel>
-          <InputGroup>
+        <form onSubmit={Submit} style={{ width: '100%' }}>
+          <FormControl isInvalid={fieldsError.email !== ''}>
+            <FormLabel>Email</FormLabel>
             <Input
+              type="email"
+              name="email"
               bg={InputBg}
-              name="password"
-              type={passwordShow ? 'text' : 'password'}
-              value={fieldsValue.password}
+              value={fieldsValue.email}
               onChange={handleInputChange}
             />
-            <InputRightElement width="4.5rem">
-              <IconButton
-                icon={passwordShow ? <ViewOffIcon /> : <ViewIcon />}
-                bg={'transparent'}
-                color={useColorModeValue('black', 'white')}
-                _hover={{ background: 'transparent' }}
-                onClick={passwordShowClick}
+            {fieldsError.email !== '' && (
+              <FormErrorMessage>{fieldsError.email}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isInvalid={fieldsError.password !== ''}>
+            <FormLabel>Password</FormLabel>
+            <InputGroup>
+              <Input
+                bg={InputBg}
+                name="password"
+                type={passwordShow ? 'text' : 'password'}
+                value={fieldsValue.password}
+                onChange={handleInputChange}
               />
-            </InputRightElement>
-          </InputGroup>
-          {fieldsError.password !== '' && (
-            <FormErrorMessage>{fieldsError.password}</FormErrorMessage>
-          )}
-        </FormControl>
-        <HStack>
-          <ButtonStd
-            size={'md'}
-            isLoading={buttonLoading}
-            onClick={Submit}
-            label="Login"
-          />
-          <ButtonStd
-            size={'md'}
-            label="Signup"
-            onClick={() => {
-              navigate('/signup');
-            }}
-          />
-        </HStack>
+              <InputRightElement width="4.5rem">
+                <IconButton
+                  icon={passwordShow ? <ViewOffIcon /> : <ViewIcon />}
+                  bg={'transparent'}
+                  color={useColorModeValue('black', 'white')}
+                  _hover={{ background: 'transparent' }}
+                  onClick={passwordShowClick}
+                />
+              </InputRightElement>
+            </InputGroup>
+            {fieldsError.password !== '' && (
+              <FormErrorMessage>{fieldsError.password}</FormErrorMessage>
+            )}
+          </FormControl>
+          <Center>
+            <HStack mt={4}>
+              <ButtonStd
+                size={'md'}
+                isLoading={buttonLoading}
+                type="submit"
+                label="Login"
+              />
+              <ButtonStd
+                size={'md'}
+                label="Signup"
+                onClick={() => {
+                  navigate('/signup');
+                }}
+              />
+            </HStack>
+          </Center>
+        </form>
         <Link
           onClick={() => {
             navigate('/forgotpassword');
