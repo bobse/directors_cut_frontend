@@ -32,6 +32,7 @@ export const LoginPage = props => {
   let location = useLocation();
   let from = location.state?.from?.pathname || '/';
   let searchParam = location.state?.from?.search || '';
+
   React.useEffect(() => {
     if (auth.isAuthenticated()) {
       navigate(from + searchParam);
@@ -47,7 +48,7 @@ export const LoginPage = props => {
     password: '',
   });
   const [alertErrors, setAlertErrors] = React.useState();
-  const [buttonLoading, setButtonLoading] = React.useState(false);
+  const [apiLoading, setApiLoading] = React.useState(false);
   const [passwordShow, setPasswordShow] = React.useState(false);
   const logoMode = useColorModeValue(LogoLightMode, logoDarkMode);
   const bgImage = useColorModeValue(BgLight, BgDark);
@@ -62,6 +63,15 @@ export const LoginPage = props => {
           </Alert>
         );
       });
+    } else {
+      return (
+        props.message && (
+          <Alert status="warning">
+            <AlertIcon />
+            <AlertDescription>{props.message}</AlertDescription>
+          </Alert>
+        )
+      );
     }
   };
 
@@ -71,13 +81,23 @@ export const LoginPage = props => {
     let values = JSON.parse(JSON.stringify(fieldsValue));
     if (ValidateInputs(values)) {
       try {
-        setButtonLoading(true);
+        setApiLoading(true);
         const response = await auth.login(values);
         auth.saveProfile(response.data);
         navigate(from + searchParam, { replace: true });
       } catch (error) {
-        setAlertErrors(['Unable to log in with provided credentials.']);
-        setButtonLoading(false);
+        let errorList = [];
+        const responseError =
+          typeof error.response?.data === 'object' && error.response?.data;
+        if (responseError) {
+          for (let item in responseError) {
+            errorList = errorList.concat(responseError[item]);
+          }
+          setAlertErrors(errorList);
+        } else {
+          setAlertErrors(['Unable to log in with provided credentials.']);
+        }
+        setApiLoading(false);
       }
     }
   }
@@ -141,7 +161,7 @@ export const LoginPage = props => {
           You let us know what directors you're into and we'll let you know if
           something new comes up.
         </Text>
-        <Alerts alertErrors={alertErrors} />
+        <Alerts alertErrors={alertErrors} message={location.state?.message} />
         <form onSubmit={Submit} style={{ width: '100%' }}>
           <FormControl isInvalid={fieldsError.email !== ''}>
             <FormLabel>Email</FormLabel>
@@ -184,7 +204,7 @@ export const LoginPage = props => {
             <HStack mt={4}>
               <ButtonStd
                 size={'md'}
-                isLoading={buttonLoading}
+                isLoading={apiLoading}
                 type="submit"
                 label="Login"
               />

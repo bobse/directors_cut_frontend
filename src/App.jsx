@@ -18,6 +18,8 @@ import { LoginPage } from './routes/LoginPage/LoginPage';
 import { NotFoundPage } from './routes/NotFoundPage/NotFoundPage';
 import { SignUpPage } from './routes/SignUpPage/SignUpPage';
 import { ForgotPasswordPage } from './routes/ForgotPasswordPage/ForgotPasswordPage';
+import { NewPasswordPage } from './routes/NewPasswordPage/NewPasswordPage';
+import { ConfirmationEmailPage } from './routes/ConfirmationEmailPage/ConfirmationEmailPage';
 import auth from './services/auth';
 
 function App() {
@@ -36,7 +38,12 @@ function App() {
             />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route
+              path="/emailconfirmation"
+              element={<ConfirmationEmailPage />}
+            />
             <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
+            <Route path="/newpassword" element={<NewPasswordPage />} />
             <Route path="/*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>

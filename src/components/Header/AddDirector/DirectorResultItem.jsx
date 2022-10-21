@@ -15,7 +15,6 @@ export const DirectorResultItem = props => {
       setIsAdding(false);
     } catch (error) {
       setIsAdding(false);
-      console.log(props);
     }
   }
 

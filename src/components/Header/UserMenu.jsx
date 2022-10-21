@@ -32,7 +32,6 @@ export const UserMenu = props => {
         <MenuItem>Edit profile</MenuItem>
         <MenuItem
           onClick={() => {
-            console.log('logout');
             auth.logout();
           }}
         >

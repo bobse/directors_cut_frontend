@@ -17,6 +17,9 @@ import logoDarkMode from '../../assets/logo_dark_mode.png';
 import BgLight from '../../assets/bg_light.png';
 import BgDark from '../../assets/bg_dark.png';
 import { ButtonStd } from '../../components/ButtonStd/ButtonStd';
+import { Alerts } from '../../components/Alerts/Alerts';
+import * as constants from '../../constants';
+import api from '../../services/api';
 
 export const ForgotPasswordPage = props => {
   const navigate = useNavigate();
@@ -26,16 +29,13 @@ export const ForgotPasswordPage = props => {
   const [fieldsError, setFieldsError] = React.useState({
     email: '',
   });
+  const [alertErrors, setAlertErrors] = React.useState([
+    { msg: undefined, status: 'error' },
+  ]);
+  const [apiLoading, setApiLoading] = React.useState(false);
   const logoMode = useColorModeValue(LogoLightMode, logoDarkMode);
   const bgImage = useColorModeValue(BgLight, BgDark);
   const InputBg = useColorModeValue('whiteAlpha.500', 'blackAlpha.400');
-
-  function Submit() {
-    let values = JSON.parse(JSON.stringify(fieldsValue));
-    if (ValidateInputs(values)) {
-      console.log(fieldsValue);
-    }
-  }
 
   function ValidateInputs(values) {
     let noErrors = true;
@@ -61,6 +61,38 @@ export const ForgotPasswordPage = props => {
     setFieldsValue(newValues);
   }
 
+  async function Submit(e) {
+    e.preventDefault();
+    let values = JSON.parse(JSON.stringify(fieldsValue));
+    if (ValidateInputs(values)) {
+      setApiLoading(true);
+      try {
+        await api.post(constants.APIFORGOTPASSWORD, values);
+        setAlertErrors([
+          {
+            msg: 'Please check your email to proceed with password reset',
+            status: 'success',
+          },
+        ]);
+      } catch (error) {
+        let errorList = [];
+        const responseError =
+          typeof error.response?.data === 'object' && error.response?.data;
+        if (responseError) {
+          for (let item in responseError) {
+            errorList = errorList.concat({
+              msg: responseError[item],
+              status: 'error',
+            });
+          }
+        }
+        setAlertErrors(errorList);
+      } finally {
+        setApiLoading(false);
+      }
+    }
+  }
+
   return (
     <Center
       w={'full'}
@@ -82,36 +114,37 @@ export const ForgotPasswordPage = props => {
         <Text fontSize={['md', 'lg']}>
           Please enter your email to reset your password.
         </Text>
-        <FormControl isInvalid={fieldsError.email !== ''}>
-          <FormLabel>Email</FormLabel>
-          <Input
-            type="email"
-            name="email"
-            bg={InputBg}
-            value={fieldsValue.email}
-            onChange={handleInputChange}
-          />
-          {fieldsError.email !== '' && (
-            <FormErrorMessage>{fieldsError.email}</FormErrorMessage>
-          )}
-        </FormControl>
-
-        <HStack>
-          <ButtonStd
-            size={'md'}
-            label="Reset password"
-            onClick={() => {
-              Submit();
-            }}
-          />
-          <ButtonStd
-            size={'md'}
-            label="Cancel"
-            onClick={() => {
-              navigate('/login');
-            }}
-          />
-        </HStack>
+        <Alerts alertErrors={alertErrors} />
+        <form onSubmit={Submit} style={{ width: '100%' }}>
+          <FormControl isInvalid={fieldsError.email !== ''}>
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              name="email"
+              bg={InputBg}
+              value={fieldsValue.email}
+              onChange={handleInputChange}
+            />
+            {fieldsError.email !== '' && (
+              <FormErrorMessage>{fieldsError.email}</FormErrorMessage>
+            )}
+          </FormControl>
+          <HStack mt={4}>
+            <ButtonStd
+              size={'md'}
+              isLoading={apiLoading}
+              label="Reset password"
+              type="submit"
+            />
+            <ButtonStd
+              size={'md'}
+              label="Cancel"
+              onClick={() => {
+                navigate('/login');
+              }}
+            />
+          </HStack>
+        </form>
       </VStack>
     </Center>
   );
