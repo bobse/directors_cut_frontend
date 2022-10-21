@@ -35,9 +35,16 @@ export const DirectorCard = props => {
           setDeleteDirectorId={setDeleteDirectorId}
           directorInfo={props.directorInfo}
         />
+        {/* MOVIE ITEMS */}
         {props.directorInfo.movies.length > 0 ? (
           props.directorInfo.movies.map((movie, idx) => {
-            return <MovieItem key={movie.id} movieInfo={movie} />;
+            return (
+              <MovieItem
+                key={movie.id}
+                movieInfo={movie}
+                updateMyDirectorsUserChoice={props.updateMyDirectorsUserChoice}
+              />
+            );
           })
         ) : (
           <Text p={4}>No current new projects</Text>

@@ -18,7 +18,6 @@ import {
   AlertIcon,
   InputGroup,
   IconButton,
-  Box,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import LogoLightMode from '../../assets/logo.png';

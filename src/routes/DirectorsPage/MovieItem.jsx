@@ -12,7 +12,51 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { StarIcon, CheckCircleIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { MovieInfo } from './MovieInfo/MovieInfo';
+import { MovieInfo } from './MovieDrawer/MovieDrawer';
+import api from '../../services/api';
+import * as constants from '../../constants';
+
+export const MovieItem = props => {
+  const [movieDetail, setMovieDetail] = useState();
+
+  const movieBg = useColorModeValue(
+    'linear(to-b, gray.100, transparent)',
+    'linear(to-b, gray.700, transparent)'
+  );
+
+  function composeTags() {
+    let tags = [props.movieInfo.type];
+    props.movieInfo.release_date && tags.unshift(props.movieInfo.release_date);
+    props.movieInfo.is_available_now && tags.unshift('available');
+    return tags;
+  }
+  const tagsArray = composeTags();
+
+  return (
+    <>
+      <MovieInfo movieDetail={movieDetail} setMovieDetail={setMovieDetail} />
+      <Box minH={'80px'} bgGradient={movieBg} p={2} ml={2} mt={2} pb={4}>
+        <Tags tags={tagsArray} />
+        <Flex spacing={1} overflow="hidden">
+          <Box flex={1} fontWeight={'normal'}>
+            <Link
+              onClick={() => {
+                setMovieDetail(props.movieInfo);
+              }}
+            >
+              <Text noOfLines={2}>{props.movieInfo.name}</Text>
+            </Link>
+          </Box>
+          <MovieIcons
+            updateMyDirectorsUserChoice={props.updateMyDirectorsUserChoice}
+            itemIdx={props.itemIdx}
+            movieInfo={props.movieInfo}
+          />
+        </Flex>
+      </Box>
+    </>
+  );
+};
 
 const Tags = props => {
   const bgColor = useColorModeValue('whiteAlpha.800', 'gray.900');
@@ -37,92 +81,81 @@ const Tags = props => {
     );
   });
 };
-const MovieIcons = props => {
-  const toast = useToast();
 
+const MovieIcons = props => {
+  const iconSize = [4, 3];
+  const iconsList = {
+    wishlist: <StarIcon w={iconSize} />,
+    watched: <CheckCircleIcon w={iconSize} />,
+    ignore: <ViewOffIcon w={iconSize} />,
+  };
+  const toast = useToast();
   const iconColorDisabled = useColorModeValue('gray.300', 'gray.500');
   const iconColorEnabled = useColorModeValue('black', 'white');
-  const iconSize = [4, 3];
-  return (
-    <HStack spacing={[-1, -3]}>
-      <Tooltip hasArrow label="Add to wishlist">
-        <IconButton
-          aria-label="Add to wishlist"
-          bg={'none'}
-          color={
-            props.userChoice === 'wishlist'
-              ? iconColorEnabled
-              : iconColorDisabled
-          }
-          icon={<StarIcon w={iconSize} />}
-          _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
-          onClick={() => {
-            toast({
-              title: 'Wishlist',
-              description: 'Added to wishlist',
-              status: 'success',
-              duration: 3000,
-              isClosable: true,
-              position: 'top',
-            });
-          }}
-        />
-      </Tooltip>
-      <Tooltip hasArrow label="Mark as watched">
-        <IconButton
-          aria-label="Mark as Watched"
-          bg={'none'}
-          color={
-            props.userChoice === 'watched'
-              ? iconColorEnabled
-              : iconColorDisabled
-          }
-          _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
-          icon={<CheckCircleIcon w={iconSize} />}
-        />
-      </Tooltip>
-      <Tooltip hasArrow label="Ignore this movie">
-        <IconButton
-          aria-label="Ignore Movie"
-          bg={'none'}
-          color={
-            props.userChoice === 'ignore' ? iconColorEnabled : iconColorDisabled
-          }
-          _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
-          icon={<ViewOffIcon w={iconSize} />}
-        />
-      </Tooltip>
-    </HStack>
-  );
-};
+  const [isApiLoading, setApiLoading] = useState(false);
 
-export const MovieItem = props => {
-  const [movieDetail, setMovieDetail] = useState();
+  function activateToast(userChoice, statusType = 'success') {
+    const successText =
+      props.movieInfo.user_choice !== userChoice
+        ? `Added to ${userChoice.toLowerCase()}`
+        : `Removed from ${userChoice.toLowerCase()}`;
+    const errorText =
+      'Sorry, could not process the resquest. Try again please!';
+    toast({
+      title: props.movieInfo.name,
+      description: statusType === 'success' ? successText : errorText,
+      status: statusType,
+      duration: 3000,
+      isClosable: true,
+      position: 'top',
+    });
+  }
 
-  const movieBg = useColorModeValue(
-    'linear(to-b, gray.100, transparent)',
-    'linear(to-b, gray.700, transparent)'
-  );
-  const tags = [props.movieInfo.release_date, props.movieInfo.type];
-  props.movieInfo.is_available_now && tags.unshift('available');
+  async function setUserChoice(choice) {
+    setApiLoading(true);
+    try {
+      await props.updateMyDirectorsUserChoice(props.movieInfo.id, choice);
+      activateToast(choice);
+      setTimeout(() => {
+        setApiLoading(false);
+      }, 2000);
+    } catch (error) {
+      setApiLoading(false);
+      activateToast(choice, 'error');
+      console.log(error);
+    }
+  }
+
   return (
-    <>
-      <MovieInfo movieDetail={movieDetail} setMovieDetail={setMovieDetail} />
-      <Box minH={'80px'} bgGradient={movieBg} p={2} ml={2} mt={2} pb={4}>
-        <Tags tags={tags} />
-        <Flex spacing={1} overflow="hidden">
-          <Box flex={1} fontWeight={'normal'}>
-            <Link
+    <HStack spacing={-1}>
+      {Object.keys(iconsList).map((iconKey, idx) => {
+        return (
+          <Tooltip
+            key={`${idx}_${props.movieInfo.name}`}
+            hasArrow
+            label={`${
+              props.movieInfo.user_choice !== iconKey ? 'add to' : 'remove from'
+            }  ${iconKey}`}
+          >
+            <IconButton
+              isLoading={isApiLoading}
+              key={`${idx}_${props.movieInfo.name}`}
+              aria-label="Add to wishlist"
+              bg={'none'}
+              color={
+                props.movieInfo?.user_choice === iconKey
+                  ? iconColorEnabled
+                  : iconColorDisabled
+              }
+              icon={iconsList[iconKey]}
+              _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
               onClick={() => {
-                setMovieDetail(props.movieInfo);
+                setUserChoice(iconKey, props.movieInfo);
               }}
-            >
-              <Text noOfLines={2}>{props.movieInfo.name}</Text>
-            </Link>
-          </Box>
-          <MovieIcons userChoice="wishlist" />
-        </Flex>
-      </Box>
-    </>
+            />
+          </Tooltip>
+        );
+      })}
+    </HStack>
   );
 };

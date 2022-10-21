@@ -121,6 +121,26 @@ export const DirectorsPage = props => {
     setFilters(filtersCopy);
   }
 
+  async function updateMyDirectorsUserChoice(movieId, choice) {
+    let newDirectors = JSON.parse(JSON.stringify(myDirectors));
+    newDirectors.forEach(director => {
+      const movieIdx = director.movies.findIndex(item => {
+        return item.id === movieId;
+      });
+      if (movieIdx >= 0) {
+        if (director.movies[movieIdx].user_choice === choice) {
+          director.movies[movieIdx].user_choice = null;
+        } else {
+          director.movies[movieIdx].user_choice = choice;
+        }
+      }
+    });
+    await api.post(
+      constants.APIMOVIE_WISH_WATCH + movieId + '/' + choice + '/'
+    );
+    setMyDirectors(newDirectors);
+  }
+
   const filteredDirectors = filterMyDirectors(filters, myDirectors);
 
   return (
@@ -164,6 +184,7 @@ export const DirectorsPage = props => {
                     key={director.id}
                     deleteDirectorMethod={deleteDirectorMethod}
                     directorInfo={director}
+                    updateMyDirectorsUserChoice={updateMyDirectorsUserChoice}
                   />
                 );
               })}

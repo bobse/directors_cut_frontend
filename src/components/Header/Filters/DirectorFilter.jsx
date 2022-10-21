@@ -17,6 +17,7 @@ export const DirectorFilter = props => {
   useEffect(() => {
     localStorage.setItem('filters', JSON.stringify(props.filters));
   }, [props.filters]);
+
   return (
     <Drawer
       isOpen={props.filterDrawerisOpen}
