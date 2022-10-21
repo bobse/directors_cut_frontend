@@ -7,6 +7,10 @@ import { Button } from './Button';
 
 export const customTheme = extendTheme(
   {
+    config: {
+      initialColorMode: 'dark',
+      useSystemColorMode: false,
+    },
     colors: {
       brand: baseTheme.colors.yellow,
 
