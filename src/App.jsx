@@ -1,5 +1,8 @@
 import { React } from 'react';
-
+import '@fontsource/oswald/400.css';
+import '@fontsource/oswald/700.css';
+import '@fontsource/lato/400.css';
+import '@fontsource/lato/700.css';
 import { ChakraProvider, VStack } from '@chakra-ui/react';
 import { Footer } from './components/Footer/Footer';
 import { customTheme } from './Theme/CustomTheme';
