@@ -122,7 +122,6 @@ const MovieIcons = props => {
     } catch (error) {
       setApiLoading(false);
       activateToast(choice, 'error');
-      console.log(error);
     }
   }
 
@@ -130,30 +129,22 @@ const MovieIcons = props => {
     <HStack spacing={-1}>
       {Object.keys(iconsList).map((iconKey, idx) => {
         return (
-          <Tooltip
+          <IconButton
+            isLoading={isApiLoading}
             key={`${idx}_${props.movieInfo.name}`}
-            hasArrow
-            label={`${
-              props.movieInfo.user_choice !== iconKey ? 'add to' : 'remove from'
-            }  ${iconKey}`}
-          >
-            <IconButton
-              isLoading={isApiLoading}
-              key={`${idx}_${props.movieInfo.name}`}
-              aria-label="Add to wishlist"
-              bg={'none'}
-              color={
-                props.movieInfo?.user_choice === iconKey
-                  ? iconColorEnabled
-                  : iconColorDisabled
-              }
-              icon={iconsList[iconKey]}
-              _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
-              onClick={() => {
-                setUserChoice(iconKey, props.movieInfo);
-              }}
-            />
-          </Tooltip>
+            aria-label="Add to wishlist"
+            bg={'none'}
+            color={
+              props.movieInfo?.user_choice === iconKey
+                ? iconColorEnabled
+                : iconColorDisabled
+            }
+            icon={iconsList[iconKey]}
+            _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
+            onClick={() => {
+              setUserChoice(iconKey, props.movieInfo);
+            }}
+          />
         );
       })}
     </HStack>
