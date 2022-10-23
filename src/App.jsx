@@ -20,6 +20,7 @@ import { SignUpPage } from './routes/SignUpPage/SignUpPage';
 import { ForgotPasswordPage } from './routes/ForgotPasswordPage/ForgotPasswordPage';
 import { NewPasswordPage } from './routes/NewPasswordPage/NewPasswordPage';
 import { ConfirmationEmailPage } from './routes/ConfirmationEmailPage/ConfirmationEmailPage';
+import { AboutPage } from './routes/AboutPage/AboutPage';
 import auth from './services/auth';
 
 function App() {
@@ -44,10 +45,11 @@ function App() {
             />
             <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
             <Route path="/newpassword" element={<NewPasswordPage />} />
+            <Route path="/about" element={<AboutPage />} />
             <Route path="/*" element={<NotFoundPage />} />
           </Routes>
+          <Footer />
         </BrowserRouter>
-        <Footer />
       </VStack>
     </ChakraProvider>
   );

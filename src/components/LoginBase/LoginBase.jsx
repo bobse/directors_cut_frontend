@@ -18,20 +18,22 @@ export const LoginBase = props => {
     <Center
       w={'full'}
       h={'full'}
-      backgroundImage={bgImage}
+      backgroundImage={!props.noBackground && bgImage}
       backgroundRepeat={'no-repeat'}
       backgroundPosition={'center'}
       backgroundSize={'contain'}
     >
       <VStack maxW={'450px'} p={10} borderRadius={8}>
-        <Image
-          maxH={['100px', '250px']}
-          objectFit="contain"
-          src={logoMode}
-          alt="Directors Cut Logo"
-          alignSelf={'flex-start'}
-          mb={4}
-        />
+        {!props.noLogo && (
+          <Image
+            maxH={['100px', '250px']}
+            objectFit="contain"
+            src={logoMode}
+            alt="Directors Cut Logo"
+            alignSelf={'flex-start'}
+            mb={4}
+          />
+        )}
         {props.children}
       </VStack>
     </Center>

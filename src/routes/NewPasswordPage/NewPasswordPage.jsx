@@ -1,5 +1,6 @@
-import { React, useState } from 'react';
-import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
+import React, { useState } from 'react';
+import { LoginBase } from '../../components/LoginBase/LoginBase';
+import { useNavigate } from 'react-router-dom';
 import {
   Text,
   HStack,
@@ -13,14 +14,12 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { LoginBase } from '../../components/LoginBase/LoginBase';
 import { Alerts } from '../../components/Alerts/Alerts';
 import { ButtonStd } from '../../components/ButtonStd/ButtonStd';
 import api from '../../services/api';
 import * as constants from '../../constants';
 
 export const NewPasswordPage = props => {
-  const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(window.location.search);
   const token = queryParams.get('token');
