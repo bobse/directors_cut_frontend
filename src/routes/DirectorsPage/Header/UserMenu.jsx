@@ -29,7 +29,9 @@ export const UserMenu = props => {
           {profile?.user?.name} - {profile?.user?.email}
         </MenuItem>
         <MenuDivider />
-        <MenuItem>Edit profile</MenuItem>
+        <MenuItem onClick={() => props.setUserProfileDrawer(true)}>
+          Edit profile
+        </MenuItem>
         <MenuItem
           onClick={() => {
             auth.logout();

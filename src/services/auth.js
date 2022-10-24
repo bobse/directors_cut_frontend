@@ -7,8 +7,16 @@ const auth = {
     return axios.post(constants.APILOGIN, credentials, { headers });
   },
 
-  saveProfile(data) {
+  saveToken(data) {
     localStorage.setItem('token', JSON.stringify(data));
+  },
+
+  saveProfile(userData) {
+    const profile = this.getProfile();
+    if (profile) {
+      profile.user = userData;
+      this.saveToken(profile);
+    }
   },
 
   getProfile() {
@@ -64,7 +72,7 @@ const auth = {
       axios.post(constants.APIUSER, '', { headers }).then(response => {
         let data = this.getProfile();
         data['user'] = response.data;
-        this.saveProfile(data);
+        this.saveToken(data);
       });
     }
   },

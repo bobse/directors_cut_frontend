@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
 export const SERVER = API_SERVER;
 export const APIUSER = API_SERVER + '/api/account/silentauth/';
 export const APILOGIN = API_SERVER + '/api/account/login/';
-export const APIUPDATE = API_SERVER + '/api/account/update/';
+export const APIUPDATEUSER = API_SERVER + '/api/account/update/';
 export const APISIGNUP = API_SERVER + '/api/account/create/';
 export const APISEARCH = API_SERVER + '/api/core/directors/';
 export const APITRENDING = API_SERVER + '/api/core/directors/trending/';

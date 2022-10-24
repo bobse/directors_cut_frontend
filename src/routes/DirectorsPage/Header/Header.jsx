@@ -8,10 +8,12 @@ import { FiltersDrawer } from '../Filters/FiltersDrawer';
 import { AddDirector } from './AddDirector/AddDirector';
 import { ButtonStd } from '../../../components/ButtonStd/ButtonStd';
 import { UserMenu } from './UserMenu';
+import { UserProfile } from './UserProfile/UserProfile';
 
 export const Header = props => {
   const [filterDrawerisOpen, setfilterDrawer] = useState(false);
   const [addDirectorDrawerisOpen, setAddDirectorDrawer] = useState(false);
+  const [userProfileDrawer, setUserProfileDrawer] = useState(false);
   return (
     <Flex w="100%" p={0}>
       <FiltersDrawer
@@ -27,13 +29,16 @@ export const Header = props => {
         addDirector={props.addDirector}
         myDirectors={props.myDirectors}
       />
-
+      <UserProfile
+        setUserProfileDrawer={setUserProfileDrawer}
+        userProfileDrawer={userProfileDrawer}
+      />
       <Center flex={1} justifyContent={'left'}>
         <Logo />
       </Center>
       <VStack alignItems={'flex-end'}>
         <Box>
-          <UserMenu />
+          <UserMenu setUserProfileDrawer={setUserProfileDrawer} />
           <IconButton
             aria-label="Filters"
             fontSize="1.2rem"

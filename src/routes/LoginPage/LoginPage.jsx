@@ -83,7 +83,7 @@ export const LoginPage = props => {
       try {
         setApiLoading(true);
         const response = await auth.login(values);
-        auth.saveProfile(response.data);
+        auth.saveToken(response.data);
         navigate(from + searchParam, { replace: true });
       } catch (error) {
         let errorList = [];
