@@ -10,12 +10,14 @@ import {
   DrawerFooter,
   VStack,
 } from '@chakra-ui/react';
-import { ButtonStd } from '../../ButtonStd/ButtonStd';
-import { filtersConstant } from './filterHelper';
+import { ButtonStd } from '../../../components/ButtonStd/ButtonStd';
+import { directorFilter } from './filterFunctions';
 
-export const DirectorFilter = props => {
+export const FiltersDrawer = props => {
   useEffect(() => {
-    localStorage.setItem('filters', JSON.stringify(props.filters));
+    if (props.filters) {
+      localStorage.setItem('filters', JSON.stringify(props.filters));
+    }
   }, [props.filters]);
 
   return (
@@ -32,11 +34,11 @@ export const DirectorFilter = props => {
         <DrawerBody>
           <VStack align={'left'}>
             {props.filters &&
-              Object.keys(filtersConstant).map((filterkey, idx) => {
+              Object.keys(directorFilter.filterList).map((filterkey, idx) => {
                 return (
                   <ButtonStd
                     key={idx}
-                    label={filtersConstant[filterkey].label}
+                    label={directorFilter.filterList[filterkey].label}
                     variant={props.filters[filterkey] ? 'solid' : 'off'}
                     onClick={() => {
                       let newFilters = JSON.parse(

@@ -1,5 +1,7 @@
 import { React, useEffect, useState } from 'react';
-import { DirectorCard } from './DirectorCard';
+import { DirectorCard, DirectorName } from './DirectorCard';
+import { MovieItem, MovieIcons, MovieTags } from './MovieItem';
+import { MovieDrawer } from './MovieDrawer/MovieDrawer';
 import {
   Box,
   VStack,
@@ -8,21 +10,29 @@ import {
   Center,
   useToast,
   Link,
+  Flex,
+  Spacer,
+  Text,
 } from '@chakra-ui/react';
-import { Header } from '../../components/Header/Header';
+import { Header } from './Header/Header';
 import api from '../../services/api';
 import auth from '../../services/auth';
 import * as constants from '../../constants';
 import { useNavigate } from 'react-router-dom';
-import filterMyDirectors, {
-  generateFilterStates,
-} from '../../components/Header/Filters/filterHelper';
+import { directorFilter } from './Filters/filterFunctions';
+import DirectorFilterCount from './DirectorFilterCount';
+import { DeleteModal } from './DeleteModal';
 
 export const DirectorsPage = props => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [myDirectors, setMyDirectors] = useState([]);
-  const [filters, setFilters] = useState(generateFilterStates());
+  const [filters, setFilters] = useState(
+    directorFilter.generateFilterInitialStates()
+  );
+  const [movieDetailDrawer, setMovieDetailDrawer] = useState();
+  const [deleteModal, setDeleteModal] = useState();
+
   const toast = useToast();
 
   useEffect(() => {
@@ -40,14 +50,16 @@ export const DirectorsPage = props => {
     getDirectors();
   }, [navigate]);
 
-  async function deleteDirectorMethod(id) {
-    let myNewDirectors = JSON.parse(JSON.stringify(myDirectors));
-    const directorIndex = myNewDirectors.findIndex(object => {
-      return object.id === id;
-    });
+  async function deleteDirectorMethod() {
+    const id = myDirectors[deleteModal].id;
+    const directorIndex = deleteModal;
+    // const directorIndex = myNewDirectors.findIndex(object => {
+    //   return object.id === id;
+    // });
     await api
       .delete(constants.APIDIRECTOR + id + '/')
       .then(response => {
+        let myNewDirectors = JSON.parse(JSON.stringify(myDirectors));
         toast({
           title: 'Deleted!',
           description:
@@ -141,10 +153,19 @@ export const DirectorsPage = props => {
     setMyDirectors(newDirectors);
   }
 
-  const filteredDirectors = filterMyDirectors(filters, myDirectors);
-
+  const filteredDirectors = directorFilter.filter(filters, myDirectors);
   return (
     <Box flexGrow={1} w={'full'}>
+      <DeleteModal
+        deleteModal={deleteModal}
+        setDeleteModal={setDeleteModal}
+        deleteDirectorMethod={deleteDirectorMethod}
+        director={deleteModal !== undefined ? myDirectors[deleteModal] : null}
+      />
+      <MovieDrawer
+        movieDetailDrawer={movieDetailDrawer}
+        setMovieDetailDrawer={setMovieDetailDrawer}
+      />
       <VStack spacing={4}>
         <Header
           myDirectors={myDirectors}
@@ -165,29 +186,66 @@ export const DirectorsPage = props => {
               />
             </Center>
           )}
-          {myDirectors.length > 0 && (
-            <Box fontSize={'sm'} mb={4} textAlign={'right'}>
-              Showing {filteredDirectors.length} of {myDirectors?.length}{' '}
-              directors
-              {filteredDirectors.length !== myDirectors.length && (
-                <Link px={2} onClick={clearFilters}>
-                  ( Clear filters )
-                </Link>
-              )}
-            </Box>
+
+          {!isLoading && (
+            <DirectorFilterCount
+              directorCount={myDirectors ? myDirectors.length : 0}
+              filteredCount={
+                myDirectors.filter(director => {
+                  return director.hide !== undefined && !director.hide;
+                }).length
+              }
+              clearFilters={clearFilters}
+            />
           )}
-          <SimpleGrid columns={[1, 2, 3, 4]} spacing="40px">
-            {myDirectors.length > 0 &&
-              filteredDirectors.map(director => {
-                return (
-                  <DirectorCard
-                    key={director.id}
-                    deleteDirectorMethod={deleteDirectorMethod}
+          <SimpleGrid columns={[1, 2, 5]} spacing="40px" minChildWidth="300px">
+            {filteredDirectors.map((director, directorIdx) => {
+              if (director.hide) return null;
+              return (
+                <DirectorCard key={director.id}>
+                  <DirectorName
                     directorInfo={director}
-                    updateMyDirectorsUserChoice={updateMyDirectorsUserChoice}
-                  />
-                );
-              })}
+                    directorIdx={directorIdx}
+                    setDeleteModal={setDeleteModal}
+                    movieCount={director.movies.length}
+                  >
+                    {director.name}
+                  </DirectorName>
+                  {director.movies.map((movie, movieIdx) => {
+                    if (movie.hide) return null;
+                    return (
+                      <MovieItem key={movie.id}>
+                        <MovieTags movieInfo={movie} />
+                        <Flex>
+                          <Link
+                            onClick={() => {
+                              setMovieDetailDrawer(movie);
+                            }}
+                          >
+                            <Text noOfLines={2}>{movie.name}</Text>
+                          </Link>
+                          <Spacer />
+                          <MovieIcons
+                            updateMyDirectorsUserChoice={
+                              updateMyDirectorsUserChoice
+                            }
+                            movieInfo={movie}
+                          />
+                        </Flex>
+                      </MovieItem>
+                    );
+                  })}
+                  {director.movies.length === 0 && (
+                    <MovieItem>No current projects</MovieItem>
+                  )}
+                  {director.movies.length !== 0 &&
+                    director.movies.length ===
+                      director.movies.filter(movie => movie.hide).length && (
+                      <MovieItem>Clear filters to view the projects</MovieItem>
+                    )}
+                </DirectorCard>
+              );
+            })}
           </SimpleGrid>
         </Box>
       </VStack>

@@ -10,56 +10,59 @@ import {
   VStack,
   Box,
   Image,
-  HStack,
   Badge,
   Center,
   useBreakpointValue,
+  HStack,
 } from '@chakra-ui/react';
 
-export const MovieInfo = props => {
+export const MovieDrawer = props => {
+  const RenderBadgeIfExists = (value, variant, text) => {
+    if (value !== undefined && value !== null) {
+      return <Badge variant={variant}>{text ? text : value}</Badge>;
+    }
+  };
   return (
     <Drawer
-      isOpen={props.movieDetail}
-      placement={useBreakpointValue(['bottom', 'right'])}
-      onClose={() => props.setMovieDetail()}
+      isOpen={props.movieDetailDrawer}
+      placement={useBreakpointValue('bottom', 'right')}
+      onClose={() => {
+        props.setMovieDetailDrawer();
+      }}
       size={'md'}
+      id="movieDrawer"
     >
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerCloseButton />
+        <DrawerCloseButton _focusVisible={false} />
         <DrawerHeader px={8}>
-          {props.movieDetail?.name}
-          <Box fontSize={'xs'}>{props.movieDetail?.genre}</Box>
+          {props.movieDetailDrawer?.name}
+          <Box fontSize={'xs'}>{props.movieDetailDrawer?.genre}</Box>
+          <HStack alignItems={'flex-start'} spacing={1} py={1}>
+            {RenderBadgeIfExists(
+              props.movieDetailDrawer?.is_available_now,
+              'available',
+              'Available'
+            )}
+            {RenderBadgeIfExists(props.movieDetailDrawer?.release_date)}
+            {RenderBadgeIfExists(props.movieDetailDrawer?.type)}
+            {RenderBadgeIfExists(props.movieDetailDrawer?.user_choice, 'gray')}
+          </HStack>
         </DrawerHeader>
         <DrawerBody>
-          {props.movieDetail?.poster_url && (
+          {props.movieDetailDrawer?.poster_url && (
             <Center py={8}>
               <Image
                 maxW={['60%', '50%']}
                 src={
                   'https://image.tmdb.org/t/p/w300_and_h450_bestv2' +
-                  props.movieDetail?.poster_url
+                  props.movieDetailDrawer?.poster_url
                 }
               />
             </Center>
           )}
           <VStack alignItems={'flex-start'} spacing={0}>
-            <Box>
-              {props.movieDetail?.is_available_now && (
-                <Badge
-                  fontSize={{ base: '0.6rem' }}
-                  fontWeight={'normal'}
-                  mt={-4}
-                  ml={-1}
-                  mr={2}
-                  px="1.5"
-                  textTransform={'uppercase'}
-                >
-                  Available
-                </Badge>
-              )}
-            </Box>
-            <Box>{props.movieDetail?.sinopsis}</Box>
+            <Box>{props.movieDetailDrawer?.sinopsis}</Box>
           </VStack>
         </DrawerBody>
         <DrawerFooter></DrawerFooter>

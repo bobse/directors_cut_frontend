@@ -12,7 +12,6 @@ import {
 export const DeleteModal = props => {
   const cancelRef = React.useRef();
   const [isLoading, setIsLoading] = React.useState(false);
-
   return (
     <AlertDialog
       motionPreset="slideInBottom"
@@ -23,18 +22,16 @@ export const DeleteModal = props => {
       }}
       leastDestructiveRef={cancelRef}
       onClose={() => {
-        props.closeModal();
+        props.setDeleteModal();
       }}
-      isOpen={props.deleteDirectorId.id !== undefined}
+      isOpen={props.deleteModal !== undefined}
       isCentered
     >
       <AlertDialogOverlay />
       <AlertDialogContent>
-        <AlertDialogHeader>
-          Delete {props.deleteDirectorId.name}?
-        </AlertDialogHeader>
+        <AlertDialogHeader>Delete {props.director?.name}?</AlertDialogHeader>
         <AlertDialogBody>
-          Are you sure you want to delete {props.deleteDirectorId.name} ?
+          Are you sure you want to delete {props.director?.name} ?
         </AlertDialogBody>
         <AlertDialogFooter>
           <Button
@@ -43,7 +40,7 @@ export const DeleteModal = props => {
             ref={cancelRef}
             isDisabled={isLoading}
             onClick={() => {
-              props.closeModal();
+              props.setDeleteModal();
             }}
           >
             Cancel
@@ -57,8 +54,8 @@ export const DeleteModal = props => {
             ml={3}
             onClick={async e => {
               setIsLoading(true);
-              await props.deleteDirectorMethod(props.deleteDirectorId.id);
-              props.closeModal();
+              await props.deleteDirectorMethod();
+              props.setDeleteModal();
             }}
           >
             Delete

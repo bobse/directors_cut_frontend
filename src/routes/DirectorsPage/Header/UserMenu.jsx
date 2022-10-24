@@ -8,7 +8,7 @@ import {
   MenuDivider,
 } from '@chakra-ui/react';
 import { BiUserCircle } from 'react-icons/bi';
-import auth from '../../services/auth';
+import auth from '../../../services/auth';
 
 export const UserMenu = props => {
   const profile = auth.getProfile();

@@ -1,7 +1,7 @@
 import { React, useState } from 'react';
 import { Badge, Box, HStack } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import { ButtonStd } from '../../ButtonStd/ButtonStd';
+import { ButtonStd } from '../../../../components/ButtonStd/ButtonStd';
 
 export const DirectorResultItem = props => {
   const [isAdding, setIsAdding] = useState(false);

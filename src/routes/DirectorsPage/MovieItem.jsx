@@ -5,25 +5,32 @@ import {
   HStack,
   IconButton,
   useColorModeValue,
-  Text,
   Flex,
-  Tooltip,
-  Link,
   useToast,
 } from '@chakra-ui/react';
 import { StarIcon, CheckCircleIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { MovieInfo } from './MovieDrawer/MovieDrawer';
-import api from '../../services/api';
-import * as constants from '../../constants';
 
 export const MovieItem = props => {
-  const [movieDetail, setMovieDetail] = useState();
-
   const movieBg = useColorModeValue(
     'linear(to-b, gray.100, transparent)',
     'linear(to-b, gray.700, transparent)'
   );
+  return (
+    <Box
+      minH={'80px'}
+      overflow="hidden"
+      bgGradient={movieBg}
+      p={2}
+      ml={2}
+      mt={2}
+      pb={4}
+    >
+      {props.children}
+    </Box>
+  );
+};
 
+export const MovieTags = props => {
   function composeTags() {
     let tags = [props.movieInfo.type];
     props.movieInfo.release_date && tags.unshift(props.movieInfo.release_date);
@@ -33,56 +40,22 @@ export const MovieItem = props => {
   const tagsArray = composeTags();
 
   return (
-    <>
-      <MovieInfo movieDetail={movieDetail} setMovieDetail={setMovieDetail} />
-      <Box minH={'80px'} bgGradient={movieBg} p={2} ml={2} mt={2} pb={4}>
-        <Tags tags={tagsArray} />
-        <Flex spacing={1} overflow="hidden">
-          <Box flex={1} fontWeight={'normal'}>
-            <Link
-              onClick={() => {
-                setMovieDetail(props.movieInfo);
-              }}
-            >
-              <Text noOfLines={2}>{props.movieInfo.name}</Text>
-            </Link>
-          </Box>
-          <MovieIcons
-            updateMyDirectorsUserChoice={props.updateMyDirectorsUserChoice}
-            itemIdx={props.itemIdx}
-            movieInfo={props.movieInfo}
-          />
-        </Flex>
-      </Box>
-    </>
+    <HStack spacing={1} mt={0} mb={1}>
+      {tagsArray.map((item, idx) => {
+        return (
+          <Badge
+            key={idx}
+            variant={item === 'available' ? 'available' : 'solid'}
+          >
+            {item}
+          </Badge>
+        );
+      })}
+    </HStack>
   );
 };
 
-const Tags = props => {
-  const bgColor = useColorModeValue('whiteAlpha.800', 'gray.900');
-  const bgColorAvailable = useColorModeValue('yellow.400', 'yellow.200');
-  const textColor = useColorModeValue('blackAlpha.900', 'whiteAlpha.900');
-  return props.tags.map((item, idx) => {
-    return (
-      <Badge
-        key={idx}
-        fontSize={{ base: '0.6rem' }}
-        fontWeight={'normal'}
-        color={item === 'available' ? 'black' : textColor}
-        bg={item === 'available' ? bgColorAvailable : bgColor}
-        mt={-4}
-        ml={-1}
-        mr={2}
-        px="1.5"
-        textTransform={'uppercase'}
-      >
-        {item}
-      </Badge>
-    );
-  });
-};
-
-const MovieIcons = props => {
+export const MovieIcons = props => {
   const iconSize = [4, 3];
   const iconsList = {
     wishlist: <StarIcon w={iconSize} />,
@@ -150,3 +123,5 @@ const MovieIcons = props => {
     </HStack>
   );
 };
+
+export default MovieItem;

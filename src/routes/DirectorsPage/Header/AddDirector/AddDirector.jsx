@@ -19,9 +19,9 @@ import {
 } from '@chakra-ui/react';
 import { Search2Icon, InfoIcon } from '@chakra-ui/icons';
 import { DirectorResultItem } from './DirectorResultItem';
-import { ButtonStd } from '../../../components/ButtonStd/ButtonStd';
-import * as constants from '../../../constants';
-import api from '../../../services/api';
+import { ButtonStd } from '../../../../components/ButtonStd/ButtonStd';
+import * as constants from '../../../../constants';
+import api from '../../../../services/api';
 
 export const AddDirector = props => {
   const [searchResults, setSearchResults] = useState([]);

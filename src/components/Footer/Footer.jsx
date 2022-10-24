@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Center, HStack, Link, Spacer, Divider } from '@chakra-ui/react';
-import { ColorModeSwitcher } from '../Header/ColorModeSwitcher';
+import { ColorModeSwitcher } from '../../components/ColorModeSwitcher/ColorModeSwitcher';
 import { Link as RouterLink } from 'react-router-dom';
 export const Footer = props => {
   return (

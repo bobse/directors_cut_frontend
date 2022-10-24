@@ -1,12 +1,12 @@
 import { React, useState } from 'react';
 import { Flex, Center, IconButton, VStack, Box } from '@chakra-ui/react';
 import { ImFilter } from 'react-icons/im';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
+import { ColorModeSwitcher } from '../../../components/ColorModeSwitcher/ColorModeSwitcher';
 import { Logo } from './Logo';
 import { AddIcon } from '@chakra-ui/icons';
-import { DirectorFilter } from './Filters/DirectorFilter';
+import { FiltersDrawer } from '../Filters/FiltersDrawer';
 import { AddDirector } from './AddDirector/AddDirector';
-import { ButtonStd } from '../ButtonStd/ButtonStd';
+import { ButtonStd } from '../../../components/ButtonStd/ButtonStd';
 import { UserMenu } from './UserMenu';
 
 export const Header = props => {
@@ -14,7 +14,7 @@ export const Header = props => {
   const [addDirectorDrawerisOpen, setAddDirectorDrawer] = useState(false);
   return (
     <Flex w="100%" p={0}>
-      <DirectorFilter
+      <FiltersDrawer
         filterDrawerisOpen={filterDrawerisOpen}
         setfilterDrawer={setfilterDrawer}
         clearFilters={props.clearFilters}

@@ -4,6 +4,7 @@ import {
   theme as baseTheme,
 } from '@chakra-ui/react';
 import { Button } from './Button';
+import { Badge } from './Badge';
 
 export const customTheme = extendTheme(
   {
@@ -125,6 +126,7 @@ export const customTheme = extendTheme(
     },
     components: {
       Button,
+      Badge,
     },
   },
 

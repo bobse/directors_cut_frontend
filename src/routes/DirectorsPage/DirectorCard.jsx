@@ -1,7 +1,6 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 import {
   Box,
-  HStack,
   Spacer,
   useColorModeValue,
   Menu,
@@ -9,65 +8,46 @@ import {
   MenuItem,
   MenuButton,
   Button,
-  Text,
+  Flex,
+  Center,
 } from '@chakra-ui/react';
 import { HiOutlineDotsVertical } from 'react-icons/hi';
-import { MovieItem } from './MovieItem';
-import { DeleteModal } from './DeleteModal';
 
 export const DirectorCard = props => {
-  const [deleteDirectorId, setDeleteDirectorId] = useState({
-    id: undefined,
-    name: undefined,
-  });
-  const closeModal = () => {
-    setDeleteDirectorId({ id: undefined, name: undefined });
-  };
   return (
-    <>
-      <DeleteModal
-        deleteDirectorId={deleteDirectorId}
-        closeModal={closeModal}
-        deleteDirectorMethod={props.deleteDirectorMethod}
-      />
-      <Box borderLeft="4px" borderColor={'yellow.400'} minH={'250px'} pb={8}>
-        <DirectorName
-          setDeleteDirectorId={setDeleteDirectorId}
-          directorInfo={props.directorInfo}
-        />
-        {/* MOVIE ITEMS */}
-        {props.directorInfo.movies.length > 0 ? (
-          props.directorInfo.movies.map((movie, idx) => {
-            return (
-              <MovieItem
-                key={movie.id}
-                movieInfo={movie}
-                updateMyDirectorsUserChoice={props.updateMyDirectorsUserChoice}
-              />
-            );
-          })
-        ) : (
-          <Text p={4}>No current new projects</Text>
-        )}
-      </Box>
-    </>
+    <Box borderLeft="4px" borderColor={'yellow.400'} pb={0} pb={4}>
+      {props.children}
+    </Box>
   );
 };
 
-const DirectorName = props => {
+export const DirectorName = props => {
   const textColor = useColorModeValue('gray.800', 'gray.800');
   return (
     <Box bg={'yellow.400'} p={1}>
-      <HStack>
+      <Flex alignItems={'center'}>
         <Box textStyle="h2" p={0} color={textColor}>
-          {props.directorInfo.name}
+          {props.children}
         </Box>
+        <Center
+          bg={'yellow.600'}
+          borderRadius={12}
+          w={5}
+          h={5}
+          ml={3}
+          fontSize={'xs'}
+          fontWeight={'bold'}
+          color={'white'}
+        >
+          {props.movieCount}
+        </Center>
+
         <Spacer />
         <DirectorDots
-          directorInfo={props.directorInfo}
-          setDeleteDirectorId={props.setDeleteDirectorId}
+          directorIdx={props.directorIdx}
+          setDeleteModal={props.setDeleteModal}
         />
-      </HStack>
+      </Flex>
     </Box>
   );
 };
@@ -88,16 +68,12 @@ const DirectorDots = props => {
       </MenuButton>
       <MenuList>
         <MenuItem
-          onClick={() =>
-            props.setDeleteDirectorId({
-              id: props.directorInfo.id,
-              name: props.directorInfo.name,
-            })
-          }
+          onClick={() => {
+            props.setDeleteModal(props.directorIdx);
+          }}
         >
           Remove from my list
         </MenuItem>
-        <MenuItem>View on imdb</MenuItem>
       </MenuList>
     </Menu>
   );
