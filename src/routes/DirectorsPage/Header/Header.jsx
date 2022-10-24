@@ -9,11 +9,14 @@ import { AddDirector } from './AddDirector/AddDirector';
 import { ButtonStd } from '../../../components/ButtonStd/ButtonStd';
 import { UserMenu } from './UserMenu';
 import { UserProfile } from './UserProfile/UserProfile';
+import { AddImdbDirector } from '../AddImdbDirector/AddImdbDirector';
 
 export const Header = props => {
   const [filterDrawerisOpen, setfilterDrawer] = useState(false);
   const [addDirectorDrawerisOpen, setAddDirectorDrawer] = useState(false);
   const [userProfileDrawer, setUserProfileDrawer] = useState(false);
+  const [addImdbDirectorDrawer, setAddImdbDirectorDrawer] = useState(false);
+
   return (
     <Flex w="100%" p={0}>
       <FiltersDrawer
@@ -28,10 +31,17 @@ export const Header = props => {
         setAddDirectorDrawer={setAddDirectorDrawer}
         addDirector={props.addDirector}
         myDirectors={props.myDirectors}
+        setAddImdbDirectorDrawer={setAddImdbDirectorDrawer}
       />
       <UserProfile
         setUserProfileDrawer={setUserProfileDrawer}
         userProfileDrawer={userProfileDrawer}
+      />
+      <AddImdbDirector
+        setAddImdbDirectorDrawer={setAddImdbDirectorDrawer}
+        addImdbDirectorDrawer={addImdbDirectorDrawer}
+        setForceRefresh={props.setForceRefresh}
+        forceRefresh={props.forceRefresh}
       />
       <Center flex={1} justifyContent={'left'}>
         <Logo />

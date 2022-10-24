@@ -32,6 +32,7 @@ export const DirectorsPage = props => {
   );
   const [movieDetailDrawer, setMovieDetailDrawer] = useState();
   const [deleteModal, setDeleteModal] = useState();
+  const [forceRefresh, setForceRefresh] = useState(false);
 
   const toast = useToast();
 
@@ -48,7 +49,7 @@ export const DirectorsPage = props => {
       }
     }
     getDirectors();
-  }, [navigate]);
+  }, [navigate, forceRefresh]);
 
   async function deleteDirectorMethod() {
     const id = myDirectors[deleteModal].id;
@@ -173,6 +174,8 @@ export const DirectorsPage = props => {
           clearFilters={clearFilters}
           setFilters={setFilters}
           filters={filters}
+          setForceRefresh={setForceRefresh}
+          forceRefresh={forceRefresh}
         />
         <Box flexGrow="1" w="full">
           {isLoading && (

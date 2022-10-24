@@ -150,6 +150,11 @@ export const AddDirector = props => {
             <InfoIcon size={4} mr={2} />
             Can't find your director in our DB? You can use
             <Link
+              as={'button'}
+              onClick={() => {
+                props.setAddDirectorDrawer(false);
+                props.setAddImdbDirectorDrawer(true);
+              }}
               fontWeight={'bold'}
               bg={'yellow.400'}
               px={1}
