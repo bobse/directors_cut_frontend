@@ -12,7 +12,6 @@ import {
   Image,
   Badge,
   Center,
-  useBreakpointValue,
   HStack,
 } from '@chakra-ui/react';
 
@@ -25,7 +24,7 @@ export const MovieDrawer = props => {
   return (
     <Drawer
       isOpen={props.movieDetailDrawer}
-      placement={useBreakpointValue('bottom', 'right')}
+      placement={'right'}
       onClose={() => {
         props.setMovieDetailDrawer();
       }}
