@@ -5,10 +5,10 @@ import {
   HStack,
   IconButton,
   useColorModeValue,
-  Flex,
   useToast,
 } from '@chakra-ui/react';
 import { StarIcon, CheckCircleIcon, ViewOffIcon } from '@chakra-ui/icons';
+import auth from '../../services/auth';
 
 export const MovieItem = props => {
   const movieBg = useColorModeValue(
@@ -31,6 +31,8 @@ export const MovieItem = props => {
 };
 
 export const MovieTags = props => {
+  const userPreviousLogin = auth.getProfile()?.user?.previous_login;
+
   function composeTags() {
     let tags = [props.movieInfo.type];
     props.movieInfo.release_date && tags.unshift(props.movieInfo.release_date);
@@ -39,13 +41,24 @@ export const MovieTags = props => {
   }
   const tagsArray = composeTags();
 
+  const variantNewAvailableItem = () => {
+    // Checks if the item is newer than user previous login
+    let value = 'available';
+    if (
+      userPreviousLogin &&
+      props.movieInfo.is_available_now > userPreviousLogin
+    ) {
+      value = 'new';
+    }
+    return value;
+  };
   return (
     <HStack spacing={1} mt={0} mb={1}>
       {tagsArray.map((item, idx) => {
         return (
           <Badge
             key={idx}
-            variant={item === 'available' ? 'available' : 'solid'}
+            variant={item === 'available' ? variantNewAvailableItem() : 'solid'}
           >
             {item}
           </Badge>

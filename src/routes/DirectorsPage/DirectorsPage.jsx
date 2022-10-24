@@ -54,9 +54,6 @@ export const DirectorsPage = props => {
   async function deleteDirectorMethod() {
     const id = myDirectors[deleteModal].id;
     const directorIndex = deleteModal;
-    // const directorIndex = myNewDirectors.findIndex(object => {
-    //   return object.id === id;
-    // });
     await api
       .delete(constants.APIDIRECTOR + id + '/')
       .then(response => {
@@ -83,15 +80,6 @@ export const DirectorsPage = props => {
           position: 'top',
         });
       });
-  }
-
-  function reorderDirectors(directorList) {
-    directorList.sort((a, b) => {
-      if (a.name.toUpperCase() < b.name.toUpperCase()) return -1;
-      if (a.name.toUpperCase() > b.name.toUpperCase()) return 1;
-      return 0;
-    });
-    return directorList;
   }
 
   async function addDirector(director) {
@@ -124,6 +112,15 @@ export const DirectorsPage = props => {
       });
       throw error;
     }
+  }
+
+  function reorderDirectors(directorList) {
+    directorList.sort((a, b) => {
+      if (a.name.toUpperCase() < b.name.toUpperCase()) return -1;
+      if (a.name.toUpperCase() > b.name.toUpperCase()) return 1;
+      return 0;
+    });
+    return directorList;
   }
 
   function clearFilters() {

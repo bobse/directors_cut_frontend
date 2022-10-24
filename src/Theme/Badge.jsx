@@ -24,7 +24,7 @@ export const Badge = defineStyleConfig({
       bg: 'yellow.400',
       color: 'black',
     },
-    now: {
+    new: {
       bg: 'red.600',
       color: 'white',
     },
