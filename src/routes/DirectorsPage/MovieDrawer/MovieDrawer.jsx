@@ -28,13 +28,13 @@ export const MovieDrawer = props => {
       onClose={() => {
         props.setMovieDetailDrawer();
       }}
-      size={'md'}
+      size={['xs', 'md']}
       id="movieDrawer"
     >
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton _focusVisible={false} />
-        <DrawerHeader px={8}>
+        <DrawerHeader pr={10}>
           {props.movieDetailDrawer?.name}
           <Box fontSize={'xs'}>{props.movieDetailDrawer?.genre}</Box>
           <HStack alignItems={'flex-start'} spacing={1} py={1}>

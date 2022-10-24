@@ -9,6 +9,7 @@ import {
   DrawerBody,
   DrawerFooter,
   VStack,
+  Box,
 } from '@chakra-ui/react';
 import { ButtonStd } from '../../../components/ButtonStd/ButtonStd';
 import { directorFilter } from './filterFunctions';
@@ -30,7 +31,17 @@ export const FiltersDrawer = props => {
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
-        <DrawerHeader>Filter your directors</DrawerHeader>
+        <DrawerHeader>
+          <Box
+            w={'85%'}
+            mt={4}
+            textStyle="h2"
+            fontWeight={'normal'}
+            fontSize={'2rem'}
+          >
+            Filter your directors
+          </Box>
+        </DrawerHeader>
         <DrawerBody>
           <VStack align={'left'}>
             {props.filters &&
