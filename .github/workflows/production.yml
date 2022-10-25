@@ -4,9 +4,9 @@ name: Production Deploy
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: ['master']
   pull_request:
-    branches: [ "main" ]
+    branches: ['master']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -15,25 +15,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     defaults:
       run:
         shell: bash
-#         working-directory: ./build
-        
+    #         working-directory: ./build
+
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
+
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      
+
       - name: 🔨 Build Project
         run: |
           npm install
           npm run build
-        
+
       - name: FTP Deploy to robertseba.com
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
@@ -45,6 +45,3 @@ jobs:
           local-dir: ./build/
           server-dir: ./directorscut/
           dangerous-clean-slate: true
-
-        
-      
