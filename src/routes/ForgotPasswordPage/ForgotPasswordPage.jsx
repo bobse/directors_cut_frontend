@@ -7,12 +7,7 @@ import {
   FormErrorMessage,
   Input,
   HStack,
-  useColorModeValue,
 } from '@chakra-ui/react';
-import LogoLightMode from '../../assets/logo.png';
-import logoDarkMode from '../../assets/logo_dark_mode.png';
-import BgLight from '../../assets/bg_light.png';
-import BgDark from '../../assets/bg_dark.png';
 import { ButtonStd } from '../../components/ButtonStd/ButtonStd';
 import { Alerts } from '../../components/Alerts/Alerts';
 import * as constants from '../../constants';

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  VStack,
-  Center,
-  Text,
-  Image,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { VStack, Center, Image, useColorModeValue } from '@chakra-ui/react';
 import LogoLightMode from '../../assets/logo.png';
 import logoDarkMode from '../../assets/logo_dark_mode.png';
 import BgLight from '../../assets/bg_light.png';

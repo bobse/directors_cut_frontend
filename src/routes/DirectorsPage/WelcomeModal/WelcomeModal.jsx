@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -6,12 +6,10 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  useDisclosure,
   Text,
   Heading,
   VStack,
 } from '@chakra-ui/react';
-import auth from '../../../services/auth';
 import { ButtonStd } from '../../../components/ButtonStd/ButtonStd';
 
 export const WelcomeModal = props => {

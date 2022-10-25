@@ -18,10 +18,6 @@ import {
   IconButton,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import LogoLightMode from '../../assets/logo.png';
-import logoDarkMode from '../../assets/logo_dark_mode.png';
-import BgLight from '../../assets/bg_light.png';
-import BgDark from '../../assets/bg_dark.png';
 import { ButtonStd } from '../../components/ButtonStd/ButtonStd';
 import auth from '../../services/auth';
 import { LoginBase } from '../../components/LoginBase/LoginBase';

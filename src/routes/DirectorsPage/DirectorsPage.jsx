@@ -170,149 +170,152 @@ export const DirectorsPage = props => {
 
   const filteredDirectors = directorFilter.filter(filters, myDirectors);
   return (
-    <Box flexGrow={1} w={'full'}>
-      <VStack spacing={4}>
-        <Header>
-          <WelcomeModal
-            welcomeModal={welcomeModal}
-            setWelcomeModal={setWelcomeModal}
-            setAddDirectorDrawer={setAddDirectorDrawer}
-          />
-          <DeleteModal
-            deleteModal={deleteModal}
-            setDeleteModal={setDeleteModal}
-            deleteDirectorMethod={deleteDirectorMethod}
-            director={
-              deleteModal !== undefined ? myDirectors[deleteModal] : null
-            }
-          />
-          <MovieDrawer
-            movieDetailDrawer={movieDetailDrawer}
-            setMovieDetailDrawer={setMovieDetailDrawer}
-          />
-          <FiltersDrawer
-            filterDrawerisOpen={filterDrawerisOpen}
-            setfilterDrawer={setfilterDrawer}
-            clearFilters={clearFilters}
-            setFilters={setFilters}
-            filters={filters}
-          />
-          <AddDirectorDrawer
-            addDirectorDrawerisOpen={addDirectorDrawerisOpen}
-            setAddDirectorDrawer={setAddDirectorDrawer}
-            addDirector={addDirector}
-            myDirectors={myDirectors}
-            setAddImdbDirectorDrawer={setAddImdbDirectorDrawer}
-          />
-          <UserProfile
-            setUserProfileDrawer={setUserProfileDrawer}
-            userProfileDrawer={userProfileDrawer}
-          />
-          <AddImdbDirector
-            setAddImdbDirectorDrawer={setAddImdbDirectorDrawer}
-            addImdbDirectorDrawer={addImdbDirectorDrawer}
-            setForceRefresh={setForceRefresh}
-            forceRefresh={forceRefresh}
-          />
-          <Box>
-            <UserMenu setUserProfileDrawer={setUserProfileDrawer} />
-            <IconButton
-              aria-label="Filters"
-              fontSize="1.2rem"
-              icon={<ImFilter />}
-              color="current"
-              variant="transparent"
-              _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
-              onClick={() => setfilterDrawer(true)}
-            />
-            <ColorModeSwitcher
-              fontSize="md"
-              _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
-            />
-          </Box>
-          <Box>
-            <ButtonStd
-              rightIcon={<AddIcon />}
-              onClick={() => setAddDirectorDrawer(true)}
-              label="Add director"
-            />
-          </Box>
-        </Header>
-        <Box flexGrow="1" w="full">
-          {isLoading && (
-            <Center>
-              <Spinner
-                thickness="5px"
-                speed="0.85s"
-                emptyColor="gray.200"
-                color="yellow.400"
-                size="xl"
+    <>
+      {/* MODALS & DRAWERS */}
+      <WelcomeModal
+        welcomeModal={welcomeModal}
+        setWelcomeModal={setWelcomeModal}
+        setAddDirectorDrawer={setAddDirectorDrawer}
+      />
+      <DeleteModal
+        deleteModal={deleteModal}
+        setDeleteModal={setDeleteModal}
+        deleteDirectorMethod={deleteDirectorMethod}
+        director={deleteModal !== undefined ? myDirectors[deleteModal] : null}
+      />
+      <MovieDrawer
+        movieDetailDrawer={movieDetailDrawer}
+        setMovieDetailDrawer={setMovieDetailDrawer}
+      />
+      <FiltersDrawer
+        filterDrawerisOpen={filterDrawerisOpen}
+        setfilterDrawer={setfilterDrawer}
+        clearFilters={clearFilters}
+        setFilters={setFilters}
+        filters={filters}
+      />
+      <AddDirectorDrawer
+        addDirectorDrawerisOpen={addDirectorDrawerisOpen}
+        setAddDirectorDrawer={setAddDirectorDrawer}
+        addDirector={addDirector}
+        myDirectors={myDirectors}
+        setAddImdbDirectorDrawer={setAddImdbDirectorDrawer}
+      />
+      <UserProfile
+        setUserProfileDrawer={setUserProfileDrawer}
+        userProfileDrawer={userProfileDrawer}
+      />
+      <AddImdbDirector
+        setAddImdbDirectorDrawer={setAddImdbDirectorDrawer}
+        addImdbDirectorDrawer={addImdbDirectorDrawer}
+        setForceRefresh={setForceRefresh}
+        forceRefresh={forceRefresh}
+      />
+      {/* END MODALS & DRAWERS */}
+      <Box flexGrow={1} w={'full'}>
+        <VStack spacing={4}>
+          <Header>
+            <Box>
+              <UserMenu setUserProfileDrawer={setUserProfileDrawer} />
+              <IconButton
+                aria-label="Filters"
+                fontSize="1.2rem"
+                icon={<ImFilter />}
+                color="current"
+                variant="transparent"
+                _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
+                onClick={() => setfilterDrawer(true)}
               />
-            </Center>
-          )}
-
-          {!isLoading && (
-            <DirectorFilterCount
-              directorCount={myDirectors ? myDirectors.length : 0}
-              filteredCount={
-                myDirectors.filter(director => {
-                  return director.hide !== undefined && !director.hide;
-                }).length
-              }
-              clearFilters={clearFilters}
-            />
-          )}
-          <Flex w={'full'} wrap={'wrap'}>
-            {filteredDirectors.map((director, directorIdx) => {
-              if (director.hide) return null;
-              return (
-                <DirectorCard key={director.id}>
-                  <DirectorName
-                    directorInfo={director}
-                    directorIdx={directorIdx}
-                    setDeleteModal={setDeleteModal}
-                    movieCount={director.movies.length}
-                  >
-                    {director.name}
-                  </DirectorName>
-                  {director.movies.map((movie, movieIdx) => {
-                    if (movie.hide) return null;
-                    return (
-                      <MovieItem key={movie.id}>
-                        <MovieTags movieInfo={movie} />
-                        <Flex>
-                          <Link
-                            onClick={() => {
-                              setMovieDetailDrawer(movie);
-                            }}
-                          >
-                            <Text noOfLines={2}>{movie.name}</Text>
-                          </Link>
-                          <Spacer />
-                          <MovieIcons
-                            updateMyDirectorsUserChoice={
-                              updateMyDirectorsUserChoice
-                            }
-                            movieInfo={movie}
-                          />
-                        </Flex>
-                      </MovieItem>
-                    );
-                  })}
-                  {director.movies.length === 0 && (
-                    <MovieItem>No current projects</MovieItem>
-                  )}
-                  {director.movies.length !== 0 &&
-                    director.movies.length ===
-                      director.movies.filter(movie => movie.hide).length && (
-                      <MovieItem>Clear filters to view the projects</MovieItem>
+              <ColorModeSwitcher
+                fontSize="md"
+                _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
+              />
+            </Box>
+            <Box>
+              <ButtonStd
+                rightIcon={<AddIcon />}
+                onClick={() => setAddDirectorDrawer(true)}
+                label="Add director"
+              />
+            </Box>
+          </Header>
+          <Box flexGrow="1" w="full">
+            {isLoading && (
+              <Center>
+                <Spinner
+                  thickness="5px"
+                  speed="0.85s"
+                  emptyColor="gray.200"
+                  color="yellow.400"
+                  size="xl"
+                />
+              </Center>
+            )}
+            {!isLoading && (
+              <DirectorFilterCount
+                directorCount={myDirectors ? myDirectors.length : 0}
+                filteredCount={
+                  myDirectors.filter(director => {
+                    return director.hide !== undefined && !director.hide;
+                  }).length
+                }
+                clearFilters={clearFilters}
+              />
+            )}
+            <Flex w={'full'} wrap={'wrap'}>
+              {filteredDirectors.map((director, directorIdx) => {
+                if (director.hide) return null;
+                return (
+                  <DirectorCard key={director.id}>
+                    <DirectorName
+                      directorInfo={director}
+                      directorIdx={directorIdx}
+                      setDeleteModal={setDeleteModal}
+                      movieCount={director.movies.length}
+                    >
+                      {director.name}
+                    </DirectorName>
+                    {director.movies.map((movie, movieIdx) => {
+                      if (movie.hide) return null;
+                      return (
+                        <MovieItem key={movie.id}>
+                          <MovieTags movieInfo={movie} />
+                          <Flex>
+                            <Link
+                              onClick={() => {
+                                setMovieDetailDrawer(movie);
+                              }}
+                            >
+                              <Text noOfLines={2}>{movie.name}</Text>
+                            </Link>
+                            <Spacer />
+                            <MovieIcons
+                              updateMyDirectorsUserChoice={
+                                updateMyDirectorsUserChoice
+                              }
+                              movieInfo={movie}
+                            />
+                          </Flex>
+                        </MovieItem>
+                      );
+                    })}
+                    {director.movies.length === 0 && (
+                      <MovieItem>No current projects</MovieItem>
                     )}
-                </DirectorCard>
-              );
-            })}
-          </Flex>
-        </Box>
-      </VStack>
-    </Box>
+                    {director.movies.length !== 0 &&
+                      director.movies.length ===
+                        director.movies.filter(movie => movie.hide).length && (
+                        <MovieItem>
+                          Clear filters to view the projects
+                        </MovieItem>
+                      )}
+                  </DirectorCard>
+                );
+              })}
+            </Flex>
+          </Box>
+        </VStack>
+      </Box>
+    </>
   );
 };

@@ -38,7 +38,6 @@ export const SignUpPage = props => {
   });
   const [alertErrors, setAlertErrors] = React.useState();
   const [passwordShow, setPasswordShow] = React.useState(false);
-  const InputBg = useColorModeValue('whiteAlpha.500', 'blackAlpha.400');
   const [apiLoading, setApiLoading] = React.useState(false);
 
   const Alerts = props => {
