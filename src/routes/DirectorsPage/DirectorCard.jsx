@@ -15,7 +15,14 @@ import { HiOutlineDotsVertical } from 'react-icons/hi';
 
 export const DirectorCard = props => {
   return (
-    <Box borderLeft="4px" borderColor={'yellow.400'} pb={4} maxW={'400px'}>
+    <Box
+      borderLeft="4px"
+      borderColor={'yellow.400'}
+      pb={4}
+      w={['100%', '30%', '30%', '23%']}
+      mx={'1%'}
+      my={4}
+    >
       {props.children}
     </Box>
   );

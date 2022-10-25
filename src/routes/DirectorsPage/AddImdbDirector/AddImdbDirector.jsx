@@ -20,7 +20,7 @@ import api from '../../../services/api';
 import { Alerts } from '../../../components/Alerts/Alerts';
 import Step1Image from './step1.png';
 import Step2Image from './step2.png';
-import { DirectorResultItem } from '../../DirectorsPage/Header/AddDirector/DirectorResultItem';
+import { DirectorResultItem } from '../AddDirectorDrawer/DirectorResultItem';
 
 export const AddImdbDirector = props => {
   let [fields, setFields] = useState({

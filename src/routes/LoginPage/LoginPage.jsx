@@ -1,10 +1,8 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
-  VStack,
   Center,
   Text,
-  Image,
   FormControl,
   FormLabel,
   FormErrorMessage,
@@ -26,6 +24,7 @@ import BgLight from '../../assets/bg_light.png';
 import BgDark from '../../assets/bg_dark.png';
 import { ButtonStd } from '../../components/ButtonStd/ButtonStd';
 import auth from '../../services/auth';
+import { LoginBase } from '../../components/LoginBase/LoginBase';
 
 export const LoginPage = props => {
   const navigate = useNavigate();
@@ -50,9 +49,6 @@ export const LoginPage = props => {
   const [alertErrors, setAlertErrors] = React.useState();
   const [apiLoading, setApiLoading] = React.useState(false);
   const [passwordShow, setPasswordShow] = React.useState(false);
-  const logoMode = useColorModeValue(LogoLightMode, logoDarkMode);
-  const bgImage = useColorModeValue(BgLight, BgDark);
-  const InputBg = useColorModeValue('whiteAlpha.500', 'blackAlpha.400');
   const Alerts = props => {
     if (props.alertErrors) {
       return props.alertErrors.map((error, idx) => {
@@ -135,97 +131,78 @@ export const LoginPage = props => {
   }
 
   return (
-    <Center
-      w={'full'}
-      h={[null, 'full']}
-      backgroundImage={bgImage}
-      backgroundRepeat={'no-repeat'}
-      backgroundPosition={'center'}
-      backgroundSize={'contain'}
-    >
-      <VStack maxW={'450px'} p={10} spacing={4} borderRadius={8}>
-        <Image
-          maxH={['100px', '250px']}
-          objectFit="contain"
-          src={logoMode}
-          alt="Directors Cut Logo"
-          alignSelf={'flex-start'}
-          mb={4}
-        />
-        <Text fontSize={['md', 'lg']}>
-          This is a tool for people that want to follow their directors and find
-          out what they are up to: movies currently playing, projects in
-          production and more to come.
-        </Text>
-        <Text fontSize={['md', 'lg']}>
-          You let us know what directors you're into and we'll let you know if
-          something new comes up.
-        </Text>
-        <Alerts alertErrors={alertErrors} message={location.state?.message} />
-        <form onSubmit={Submit} style={{ width: '100%' }}>
-          <FormControl isInvalid={fieldsError.email !== ''}>
-            <FormLabel>Email</FormLabel>
+    <LoginBase>
+      <Text fontSize={['md', 'lg']}>
+        This is a tool for people that want to follow their directors and find
+        out what they are up to: movies currently playing, projects in
+        production and more to come.
+      </Text>
+      <Text fontSize={['md', 'lg']}>
+        You let us know what directors you're into and we'll let you know if
+        something new comes up.
+      </Text>
+      <Alerts alertErrors={alertErrors} message={location.state?.message} />
+      <form onSubmit={Submit} style={{ width: '100%' }}>
+        <FormControl isInvalid={fieldsError.email !== ''}>
+          <FormLabel>Email</FormLabel>
+          <Input
+            type="email"
+            name="email"
+            value={fieldsValue.email}
+            onChange={handleInputChange}
+          />
+          {fieldsError.email !== '' && (
+            <FormErrorMessage>{fieldsError.email}</FormErrorMessage>
+          )}
+        </FormControl>
+        <FormControl isInvalid={fieldsError.password !== ''}>
+          <FormLabel>Password</FormLabel>
+          <InputGroup>
             <Input
-              type="email"
-              name="email"
-              bg={InputBg}
-              value={fieldsValue.email}
+              name="password"
+              type={passwordShow ? 'text' : 'password'}
+              value={fieldsValue.password}
               onChange={handleInputChange}
             />
-            {fieldsError.email !== '' && (
-              <FormErrorMessage>{fieldsError.email}</FormErrorMessage>
-            )}
-          </FormControl>
-          <FormControl isInvalid={fieldsError.password !== ''}>
-            <FormLabel>Password</FormLabel>
-            <InputGroup>
-              <Input
-                bg={InputBg}
-                name="password"
-                type={passwordShow ? 'text' : 'password'}
-                value={fieldsValue.password}
-                onChange={handleInputChange}
+            <InputRightElement width="4.5rem">
+              <IconButton
+                icon={passwordShow ? <ViewOffIcon /> : <ViewIcon />}
+                bg={'transparent'}
+                color={useColorModeValue('black', 'white')}
+                _hover={{ background: 'transparent' }}
+                onClick={passwordShowClick}
               />
-              <InputRightElement width="4.5rem">
-                <IconButton
-                  icon={passwordShow ? <ViewOffIcon /> : <ViewIcon />}
-                  bg={'transparent'}
-                  color={useColorModeValue('black', 'white')}
-                  _hover={{ background: 'transparent' }}
-                  onClick={passwordShowClick}
-                />
-              </InputRightElement>
-            </InputGroup>
-            {fieldsError.password !== '' && (
-              <FormErrorMessage>{fieldsError.password}</FormErrorMessage>
-            )}
-          </FormControl>
-          <Center>
-            <HStack mt={4}>
-              <ButtonStd
-                size={'md'}
-                isLoading={apiLoading}
-                type="submit"
-                label="Login"
-              />
-              <ButtonStd
-                size={'md'}
-                label="Signup"
-                onClick={() => {
-                  navigate('/signup');
-                }}
-              />
-            </HStack>
-          </Center>
-        </form>
-        <Link
-          onClick={() => {
-            navigate('/forgotpassword');
-          }}
-        >
-          Forgot password?
-        </Link>
-      </VStack>
-    </Center>
+            </InputRightElement>
+          </InputGroup>
+          {fieldsError.password !== '' && (
+            <FormErrorMessage>{fieldsError.password}</FormErrorMessage>
+          )}
+        </FormControl>
+        <Center>
+          <HStack mt={4}>
+            <ButtonStd
+              size={'md'}
+              isLoading={apiLoading}
+              type="submit"
+              label="Login"
+            />
+            <ButtonStd
+              size={'md'}
+              label="Signup"
+              onClick={() => {
+                navigate('/signup');
+              }}
+            />
+          </HStack>
+        </Center>
+      </form>
+      <Link
+        onClick={() => {
+          navigate('/forgotpassword');
+        }}
+      >
+        Forgot password?
+      </Link>
+    </LoginBase>
   );
 };

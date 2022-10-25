@@ -5,7 +5,6 @@ import { MovieDrawer } from './MovieDrawer/MovieDrawer';
 import {
   Box,
   VStack,
-  SimpleGrid,
   Spinner,
   Center,
   useToast,
@@ -13,6 +12,7 @@ import {
   Flex,
   Spacer,
   Text,
+  IconButton,
 } from '@chakra-ui/react';
 import { Header } from './Header/Header';
 import api from '../../services/api';
@@ -22,6 +22,16 @@ import { useNavigate } from 'react-router-dom';
 import { directorFilter } from './Filters/filterFunctions';
 import DirectorFilterCount from './DirectorFilterCount';
 import { DeleteModal } from './DeleteModal';
+import { WelcomeModal } from './WelcomeModal/WelcomeModal';
+import { ImFilter } from 'react-icons/im';
+import { ColorModeSwitcher } from '../../components/ColorModeSwitcher/ColorModeSwitcher';
+import { AddIcon } from '@chakra-ui/icons';
+import { FiltersDrawer } from './Filters/FiltersDrawer';
+import { AddDirectorDrawer } from './AddDirectorDrawer/AddDirectorDrawer';
+import { ButtonStd } from '../../components/ButtonStd/ButtonStd';
+import { UserMenu } from './Header/UserMenu';
+import { UserProfile } from './UserProfile/UserProfile';
+import { AddImdbDirector } from './AddImdbDirector/AddImdbDirector';
 
 export const DirectorsPage = props => {
   const navigate = useNavigate();
@@ -33,7 +43,11 @@ export const DirectorsPage = props => {
   const [movieDetailDrawer, setMovieDetailDrawer] = useState();
   const [deleteModal, setDeleteModal] = useState();
   const [forceRefresh, setForceRefresh] = useState(false);
-
+  const [welcomeModal, setWelcomeModal] = useState(false);
+  const [filterDrawerisOpen, setfilterDrawer] = useState(false);
+  const [addDirectorDrawerisOpen, setAddDirectorDrawer] = useState(false);
+  const [userProfileDrawer, setUserProfileDrawer] = useState(false);
+  const [addImdbDirectorDrawer, setAddImdbDirectorDrawer] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
@@ -42,6 +56,9 @@ export const DirectorsPage = props => {
         const response = await api.get(constants.APIDIRECTOR);
         setMyDirectors(response.data);
         setIsLoading(false);
+        if (response.data.length === 0) {
+          setWelcomeModal(true);
+        }
       } catch (error) {
         setIsLoading(false);
         auth.removeToken();
@@ -154,26 +171,73 @@ export const DirectorsPage = props => {
   const filteredDirectors = directorFilter.filter(filters, myDirectors);
   return (
     <Box flexGrow={1} w={'full'}>
-      <DeleteModal
-        deleteModal={deleteModal}
-        setDeleteModal={setDeleteModal}
-        deleteDirectorMethod={deleteDirectorMethod}
-        director={deleteModal !== undefined ? myDirectors[deleteModal] : null}
-      />
-      <MovieDrawer
-        movieDetailDrawer={movieDetailDrawer}
-        setMovieDetailDrawer={setMovieDetailDrawer}
-      />
       <VStack spacing={4}>
-        <Header
-          myDirectors={myDirectors}
-          addDirector={addDirector}
-          clearFilters={clearFilters}
-          setFilters={setFilters}
-          filters={filters}
-          setForceRefresh={setForceRefresh}
-          forceRefresh={forceRefresh}
-        />
+        <Header>
+          <WelcomeModal
+            welcomeModal={welcomeModal}
+            setWelcomeModal={setWelcomeModal}
+            setAddDirectorDrawer={setAddDirectorDrawer}
+          />
+          <DeleteModal
+            deleteModal={deleteModal}
+            setDeleteModal={setDeleteModal}
+            deleteDirectorMethod={deleteDirectorMethod}
+            director={
+              deleteModal !== undefined ? myDirectors[deleteModal] : null
+            }
+          />
+          <MovieDrawer
+            movieDetailDrawer={movieDetailDrawer}
+            setMovieDetailDrawer={setMovieDetailDrawer}
+          />
+          <FiltersDrawer
+            filterDrawerisOpen={filterDrawerisOpen}
+            setfilterDrawer={setfilterDrawer}
+            clearFilters={clearFilters}
+            setFilters={setFilters}
+            filters={filters}
+          />
+          <AddDirectorDrawer
+            addDirectorDrawerisOpen={addDirectorDrawerisOpen}
+            setAddDirectorDrawer={setAddDirectorDrawer}
+            addDirector={addDirector}
+            myDirectors={myDirectors}
+            setAddImdbDirectorDrawer={setAddImdbDirectorDrawer}
+          />
+          <UserProfile
+            setUserProfileDrawer={setUserProfileDrawer}
+            userProfileDrawer={userProfileDrawer}
+          />
+          <AddImdbDirector
+            setAddImdbDirectorDrawer={setAddImdbDirectorDrawer}
+            addImdbDirectorDrawer={addImdbDirectorDrawer}
+            setForceRefresh={setForceRefresh}
+            forceRefresh={forceRefresh}
+          />
+          <Box>
+            <UserMenu setUserProfileDrawer={setUserProfileDrawer} />
+            <IconButton
+              aria-label="Filters"
+              fontSize="1.2rem"
+              icon={<ImFilter />}
+              color="current"
+              variant="transparent"
+              _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
+              onClick={() => setfilterDrawer(true)}
+            />
+            <ColorModeSwitcher
+              fontSize="md"
+              _hover={{ transform: 'scale(1.2)', color: 'yellow.600' }}
+            />
+          </Box>
+          <Box>
+            <ButtonStd
+              rightIcon={<AddIcon />}
+              onClick={() => setAddDirectorDrawer(true)}
+              label="Add director"
+            />
+          </Box>
+        </Header>
         <Box flexGrow="1" w="full">
           {isLoading && (
             <Center>
@@ -198,7 +262,7 @@ export const DirectorsPage = props => {
               clearFilters={clearFilters}
             />
           )}
-          <SimpleGrid columns={[1, 2, 5]} spacing="40px" minChildWidth="300px">
+          <Flex w={'full'} wrap={'wrap'}>
             {filteredDirectors.map((director, directorIdx) => {
               if (director.hide) return null;
               return (
@@ -246,7 +310,7 @@ export const DirectorsPage = props => {
                 </DirectorCard>
               );
             })}
-          </SimpleGrid>
+          </Flex>
         </Box>
       </VStack>
     </Box>

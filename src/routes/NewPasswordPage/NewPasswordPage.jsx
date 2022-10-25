@@ -25,7 +25,6 @@ export const NewPasswordPage = props => {
   const token = queryParams.get('token');
   const uidb64 = queryParams.get('uidb64');
   const [passwordShow, setPasswordShow] = useState(false);
-  const InputBg = useColorModeValue('whiteAlpha.500', 'blackAlpha.400');
 
   const [fieldsValue, setFieldsValue] = useState({
     password: '',
@@ -130,7 +129,6 @@ export const NewPasswordPage = props => {
           <FormLabel>Password</FormLabel>
           <InputGroup>
             <Input
-              bg={InputBg}
               name="password"
               type={passwordShow ? 'text' : 'password'}
               value={fieldsValue.password}
@@ -151,7 +149,6 @@ export const NewPasswordPage = props => {
           <FormLabel>Password Confirmation</FormLabel>
           <InputGroup>
             <Input
-              bg={InputBg}
               name="password2"
               type={passwordShow ? 'text' : 'password'}
               value={fieldsValue.password2}

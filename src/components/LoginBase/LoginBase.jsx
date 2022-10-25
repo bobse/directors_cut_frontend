@@ -17,7 +17,8 @@ export const LoginBase = props => {
   return (
     <Center
       w={'full'}
-      h={'full'}
+      h={[null, 'full']}
+      flex={1}
       backgroundImage={!props.noBackground && bgImage}
       backgroundRepeat={'no-repeat'}
       backgroundPosition={'center'}

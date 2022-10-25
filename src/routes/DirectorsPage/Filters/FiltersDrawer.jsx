@@ -26,7 +26,7 @@ export const FiltersDrawer = props => {
       isOpen={props.filterDrawerisOpen}
       placement="right"
       onClose={() => props.setfilterDrawer(false)}
-      size={'md'}
+      size={['xs', 'md']}
     >
       <DrawerOverlay />
       <DrawerContent>

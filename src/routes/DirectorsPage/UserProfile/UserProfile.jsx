@@ -15,11 +15,11 @@ import {
   FormLabel,
   FormControl,
 } from '@chakra-ui/react';
-import { ButtonStd } from '../../../../components/ButtonStd/ButtonStd';
-import * as constants from '../../../../constants';
-import api from '../../../../services/api';
-import auth from '../../../../services/auth';
-import { Alerts } from '../../../../components/Alerts/Alerts';
+import { ButtonStd } from '../../../components/ButtonStd/ButtonStd';
+import * as constants from '../../../constants';
+import api from '../../../services/api';
+import auth from '../../../services/auth';
+import { Alerts } from '../../../components/Alerts/Alerts';
 
 export const UserProfile = props => {
   const profile = auth.getProfile()?.user;
@@ -72,7 +72,7 @@ export const UserProfile = props => {
         props.setUserProfileDrawer(false);
         setAlertErrors();
       }}
-      size={'md'}
+      size={['xs', 'md']}
     >
       <DrawerOverlay />
       <DrawerContent>

@@ -19,11 +19,11 @@ import {
 } from '@chakra-ui/react';
 import { Search2Icon, InfoIcon } from '@chakra-ui/icons';
 import { DirectorResultItem } from './DirectorResultItem';
-import { ButtonStd } from '../../../../components/ButtonStd/ButtonStd';
-import * as constants from '../../../../constants';
-import api from '../../../../services/api';
+import { ButtonStd } from '../../../components/ButtonStd/ButtonStd';
+import * as constants from '../../../constants';
+import api from '../../../services/api';
 
-export const AddDirector = props => {
+export const AddDirectorDrawer = props => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchField, setSearchField] = useState();
   const [isSearching, setIsSearching] = useState(false);
@@ -101,7 +101,9 @@ export const AddDirector = props => {
                 <InputRightElement width="4.5rem">
                   <CloseButton
                     onClick={() => {
-                      setSearchField('');
+                      if (searchField) {
+                        setSearchField('');
+                      }
                       setSearchResults([]);
                       setIsSearching(false);
                     }}

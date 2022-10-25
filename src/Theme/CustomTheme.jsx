@@ -5,6 +5,7 @@ import {
 } from '@chakra-ui/react';
 import { Button } from './Button';
 import { Badge } from './Badge';
+import { Input } from './Input';
 
 export const customTheme = extendTheme(
   {
@@ -100,6 +101,9 @@ export const customTheme = extendTheme(
         900: '#300313',
       },
     },
+    shadows: {
+      outline: 0,
+    },
     fonts: {
       heading: `'Oswald', sans-serif`,
       body: `'Lato', sans-serif`,
@@ -127,6 +131,7 @@ export const customTheme = extendTheme(
     components: {
       Button,
       Badge,
+      Input,
     },
   },
 

@@ -1,10 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  VStack,
-  Center,
   Text,
-  Image,
   FormControl,
   FormLabel,
   FormErrorMessage,
@@ -20,6 +17,7 @@ import { ButtonStd } from '../../components/ButtonStd/ButtonStd';
 import { Alerts } from '../../components/Alerts/Alerts';
 import * as constants from '../../constants';
 import api from '../../services/api';
+import { LoginBase } from '../../components/LoginBase/LoginBase';
 
 export const ForgotPasswordPage = props => {
   const navigate = useNavigate();
@@ -33,9 +31,6 @@ export const ForgotPasswordPage = props => {
     { msg: undefined, status: 'error' },
   ]);
   const [apiLoading, setApiLoading] = React.useState(false);
-  const logoMode = useColorModeValue(LogoLightMode, logoDarkMode);
-  const bgImage = useColorModeValue(BgLight, BgDark);
-  const InputBg = useColorModeValue('whiteAlpha.500', 'blackAlpha.400');
 
   function ValidateInputs(values) {
     let noErrors = true;
@@ -94,58 +89,40 @@ export const ForgotPasswordPage = props => {
   }
 
   return (
-    <Center
-      w={'full'}
-      h={'full'}
-      backgroundImage={bgImage}
-      backgroundRepeat={'no-repeat'}
-      backgroundPosition={'center'}
-      backgroundSize={'contain'}
-    >
-      <VStack maxW={'450px'} p={10} borderRadius={8}>
-        <Image
-          maxH={['100px', '250px']}
-          objectFit="contain"
-          src={logoMode}
-          alt="Directors Cut Logo"
-          alignSelf={'flex-start'}
-          mb={4}
-        />
-        <Text fontSize={['md', 'lg']}>
-          Please enter your email to reset your password.
-        </Text>
-        <Alerts alertErrors={alertErrors} />
-        <form onSubmit={Submit} style={{ width: '100%' }}>
-          <FormControl isInvalid={fieldsError.email !== ''}>
-            <FormLabel>Email</FormLabel>
-            <Input
-              type="email"
-              name="email"
-              bg={InputBg}
-              value={fieldsValue.email}
-              onChange={handleInputChange}
-            />
-            {fieldsError.email !== '' && (
-              <FormErrorMessage>{fieldsError.email}</FormErrorMessage>
-            )}
-          </FormControl>
-          <HStack mt={4}>
-            <ButtonStd
-              size={'md'}
-              isLoading={apiLoading}
-              label="Reset password"
-              type="submit"
-            />
-            <ButtonStd
-              size={'md'}
-              label="Cancel"
-              onClick={() => {
-                navigate('/login');
-              }}
-            />
-          </HStack>
-        </form>
-      </VStack>
-    </Center>
+    <LoginBase>
+      <Text fontSize={['md', 'lg']}>
+        Please enter your email to reset your password.
+      </Text>
+      <Alerts alertErrors={alertErrors} />
+      <form onSubmit={Submit} style={{ width: '100%' }}>
+        <FormControl isInvalid={fieldsError.email !== ''}>
+          <FormLabel>Email</FormLabel>
+          <Input
+            type="email"
+            name="email"
+            value={fieldsValue.email}
+            onChange={handleInputChange}
+          />
+          {fieldsError.email !== '' && (
+            <FormErrorMessage>{fieldsError.email}</FormErrorMessage>
+          )}
+        </FormControl>
+        <HStack mt={4}>
+          <ButtonStd
+            size={'md'}
+            isLoading={apiLoading}
+            label="Reset password"
+            type="submit"
+          />
+          <ButtonStd
+            size={'md'}
+            label="Cancel"
+            onClick={() => {
+              navigate('/login');
+            }}
+          />
+        </HStack>
+      </form>
+    </LoginBase>
   );
 };
